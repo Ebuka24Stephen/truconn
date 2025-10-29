@@ -65,30 +65,44 @@ export function Footer() {
 
           {/* Legal */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Legal</h4>
+            <h4 className="font-semibold text-foreground mb-4">Legal & Compliance</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/privacy" className="text-foreground/60 hover:text-foreground transition">
-                  Privacy
+                  Privacy Policy
                 </Link>
               </li>
               <li>
                 <Link href="/terms" className="text-foreground/60 hover:text-foreground transition">
-                  Terms
+                  Terms of Service
                 </Link>
               </li>
               <li>
-                <Link href="/security" className="text-foreground/60 hover:text-foreground transition">
-                  Security
+                <Link href="/ndpr" className="text-foreground/60 hover:text-foreground transition">
+                  NDPR Compliance
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
+        {/* NDPR Notice */}
+        <div className="border-t border-border pt-6 mb-6">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <p className="text-sm text-blue-900">
+              <strong>NDPR Compliance Notice:</strong> TruCon NDTS operates in accordance with the Nigeria Data
+              Protection Regulation (NDPR) 2019. All data processing activities are conducted with explicit consent and
+              in compliance with applicable data protection laws.
+            </p>
+          </div>
+        </div>
+
         {/* Bottom */}
         <div className="border-t border-border pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-foreground/60">© 2025 TruCon. All rights reserved.</p>
+          <div>
+            <p className="text-sm text-foreground/60">© 2025 TruCon NDTS. All rights reserved.</p>
+            <p className="text-xs text-foreground/50 mt-1">Nigeria Digital Trust System • Government Accredited</p>
+          </div>
           <div className="flex gap-4">
             <Link href="#" className="text-foreground/60 hover:text-foreground transition">
               <Mail size={18} />

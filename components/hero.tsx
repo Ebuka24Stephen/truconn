@@ -3,123 +3,84 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Shield, Users, Zap } from "lucide-react"
+import { ArrowRight, ShieldCheck } from "lucide-react"
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden py-20 md:py-32 lg:py-40">
+    <section className="relative overflow-hidden py-20 md:py-32 lg:py-40 bg-gradient-to-br from-white via-blue-50/30 to-white">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent text-sm font-medium">
-                <span className="w-2 h-2 bg-accent rounded-full" />
-                Transparent Governance Platform
-              </div>
-
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-                Where <span className="text-accent">Trust</span> Meets <span className="text-accent">Connection</span>
-              </h1>
-
-              <p className="text-lg text-foreground/70 leading-relaxed max-w-lg">
-                TruCon bridges citizens and organizations through transparent, secure, and verifiable connections. Build
-                trust through accountability and real-time engagement.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <Button size="lg" asChild className="gap-2">
-                  <Link href="/get-started">
-                    Get Started Free
-                    <ArrowRight size={18} />
-                  </Link>
-                </Button>
-                <Button size="lg" variant="outline" asChild>
-                  <Link href="#how-it-works">Learn More</Link>
-                </Button>
-              </div>
-
-              {/* Stats */}
-              <div className="grid grid-cols-3 gap-4 pt-8 border-t border-border">
-                <div>
-                  <div className="text-2xl font-bold text-accent">10K+</div>
-                  <div className="text-sm text-foreground/60">Active Users</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-accent">500+</div>
-                  <div className="text-sm text-foreground/60">Organizations</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-accent">99.9%</div>
-                  <div className="text-sm text-foreground/60">Uptime</div>
-                </div>
-              </div>
+        <div className="text-center max-w-4xl mx-auto">
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mb-8"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-medium border border-accent/20">
+              <ShieldCheck className="w-4 h-4" />
+              <span>NDPR Compliant • Government Accredited</span>
             </div>
           </motion.div>
 
-          {/* Right Visual */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative"
+          {/* Main Heading */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary leading-tight mb-6"
           >
-            <div className="relative h-96 md:h-full min-h-96 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl border border-border overflow-hidden">
-              {/* Animated elements */}
-              <motion.div
-                className="absolute top-10 left-10 w-20 h-20 bg-accent/20 rounded-full blur-xl"
-                animate={{ y: [0, 20, 0] }}
-                transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
-              />
-              <motion.div
-                className="absolute bottom-10 right-10 w-32 h-32 bg-primary/10 rounded-full blur-2xl"
-                animate={{ y: [0, -20, 0] }}
-                transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY }}
-              />
+            Rebuilding Trust in{" "}
+            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Nigeria's Digital Economy
+            </span>
+          </motion.h1>
 
-              {/* Content Cards */}
-              <div className="absolute inset-0 flex items-center justify-center p-8">
-                <div className="space-y-4 w-full">
-                  <motion.div
-                    className="bg-background/80 backdrop-blur border border-border rounded-lg p-4 flex items-center gap-3"
-                    animate={{ x: [0, 10, 0] }}
-                    transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY }}
-                  >
-                    <Shield className="text-accent flex-shrink-0" size={24} />
-                    <div>
-                      <div className="font-semibold text-sm">Verified Identity</div>
-                      <div className="text-xs text-foreground/60">Secure verification</div>
-                    </div>
-                  </motion.div>
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-lg md:text-xl text-neutral-600 leading-relaxed max-w-3xl mx-auto mb-8"
+          >
+            TruCon NDTS empowers citizens to control how their personal data is collected, shared, and used — while
+            giving organizations compliance visibility under NDPR and global data standards.
+          </motion.p>
 
-                  <motion.div
-                    className="bg-background/80 backdrop-blur border border-border rounded-lg p-4 flex items-center gap-3"
-                    animate={{ x: [0, -10, 0] }}
-                    transition={{ duration: 3, delay: 0.5, repeat: Number.POSITIVE_INFINITY }}
-                  >
-                    <Users className="text-accent flex-shrink-0" size={24} />
-                    <div>
-                      <div className="font-semibold text-sm">Community Driven</div>
-                      <div className="text-xs text-foreground/60">Real connections</div>
-                    </div>
-                  </motion.div>
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4"
+          >
+            <Button size="lg" asChild className="gap-2 bg-primary hover:bg-primary/90 text-white px-8 py-6 text-base">
+              <Link href="/get-started">
+                Get Started
+                <ArrowRight size={18} />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild className="px-8 py-6 text-base border-primary text-primary">
+              <Link href="#features">Learn More</Link>
+            </Button>
+          </motion.div>
 
-                  <motion.div
-                    className="bg-background/80 backdrop-blur border border-border rounded-lg p-4 flex items-center gap-3"
-                    animate={{ x: [0, 10, 0] }}
-                    transition={{ duration: 3, delay: 1, repeat: Number.POSITIVE_INFINITY }}
-                  >
-                    <Zap className="text-accent flex-shrink-0" size={24} />
-                    <div>
-                      <div className="font-semibold text-sm">Real-Time Updates</div>
-                      <div className="text-xs text-foreground/60">Instant notifications</div>
-                    </div>
-                  </motion.div>
-                </div>
-              </div>
+          {/* Trust Indicators */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="mt-12 pt-8 border-t border-neutral-200"
+          >
+            <p className="text-sm text-neutral-500 mb-4">Trusted by organizations across Nigeria</p>
+            <div className="flex flex-wrap items-center justify-center gap-8 opacity-60">
+              <div className="text-sm font-semibold text-neutral-600">Banking Sector</div>
+              <div className="text-sm font-semibold text-neutral-600">Healthcare</div>
+              <div className="text-sm font-semibold text-neutral-600">Government Agencies</div>
+              <div className="text-sm font-semibold text-neutral-600">Educational Institutions</div>
             </div>
           </motion.div>
         </div>
