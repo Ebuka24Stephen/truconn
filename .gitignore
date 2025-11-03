@@ -19,6 +19,9 @@ yarn-error.log*
 # env files
 .env*
 
+#Django
+venv/ 
+
 # vercel
 .vercel
 
