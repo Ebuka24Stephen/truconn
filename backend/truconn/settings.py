@@ -122,12 +122,23 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
     ),
+    # Disable CSRF for API endpoints (DRF handles this automatically, but explicit is better)
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
 }
 
+# CORS Configuration
+# Allow all Vercel preview deployments and localhost
 CORS_ALLOWED_ORIGINS = [
     'https://truconn.vercel.app',
     'http://localhost:3000',
+    'http://127.0.0.1:3000',
 ]
+
+# For development, allow all origins (remove in production if needed)
+# Uncomment the line below if you need to allow all origins during development
+# CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_METHODS = [
     'GET',
@@ -140,11 +151,17 @@ CORS_ALLOW_METHODS = [
 
 CORS_ALLOW_HEADERS = [
     'accept',
+    'accept-encoding',
     'authorization',
     'content-type',
+    'dnt',
+    'origin',
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+# Allow preflight requests
+CORS_PREFLIGHT_MAX_AGE = 86400
