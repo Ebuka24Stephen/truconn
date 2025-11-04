@@ -1,3 +1,5 @@
+"""
+
 from sqlalchemy import Column, String, Text, Enum, TIMESTAMP, JSON, ForeignKey, Integer
 from sqlalchemy.ext.declarative import declarative_base
 import enum
@@ -47,3 +49,4 @@ class AuditLog(Base):
     performed_by = Column(String)
     created_at = Column(TIMESTAMP)
     metadata = Column(JSON)
+"""

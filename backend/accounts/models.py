@@ -24,6 +24,8 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
+
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     
     """
@@ -49,6 +51,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    objects = CustomUserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
@@ -61,7 +64,7 @@ class Profile(models.Model):
     url = models.URLField(blank=True)
     phone_no = models.CharField(max_length=20, blank=True)
     about = models.TextField(blank=True)
-    #profile_pic = models.ImageField(upload_to='profile_photo/', blank=True, null=True)
+    profile_pic = models.ImageField(upload_to='profile_photo/', blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.first_name}'s Profile"
