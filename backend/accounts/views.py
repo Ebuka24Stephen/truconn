@@ -5,7 +5,7 @@ from .models import CustomUser, Profile
 from .serializers import LoginSerializer, RegisterSerializer, ProfileSerializer
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 class SignUpView(APIView):
@@ -33,6 +33,7 @@ class LoginView(APIView):
             password = serializer.validated_data['password']
             user = authenticate(username=email, password=password)
             if user is not None:
+                login(request, user)
                 return Response({
                     "user": {
                         "id": user.id,
