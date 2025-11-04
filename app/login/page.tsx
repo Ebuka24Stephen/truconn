@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, Suspense } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -11,7 +11,7 @@ import { AlertCircle, Eye, EyeOff } from "lucide-react"
 import { AuthAPI } from "@/lib/auth/api"
 import { useAuth } from "@/lib/auth/context"
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { login } = useAuth()
@@ -166,5 +166,25 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-primary via-primary-light to-primary flex items-center justify-center p-4">
+        <div className="w-full max-w-md relative z-10 animate-fade-in">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 mx-auto bg-white rounded-full flex items-center justify-center shadow-2xl mb-4">
+              <span className="text-2xl font-bold text-primary">✓</span>
+            </div>
+            <h1 className="text-3xl font-bold text-white mb-2">TruCon</h1>
+            <p className="text-white/80">Loading...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }
