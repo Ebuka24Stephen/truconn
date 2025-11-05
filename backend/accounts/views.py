@@ -5,7 +5,7 @@ from .models import CustomUser, Profile
 from .serializers import LoginSerializer, RegisterSerializer, ProfileSerializer
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 class SignUpView(APIView):
@@ -48,6 +48,8 @@ class LoginView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
@@ -62,3 +64,6 @@ class ProfileView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+

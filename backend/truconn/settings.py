@@ -163,3 +163,6 @@ CORS_ALLOW_CREDENTIALS = True
 
 # Allow preflight requests
 CORS_PREFLIGHT_MAX_AGE = 86400
+
+
+
