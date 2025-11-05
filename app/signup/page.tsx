@@ -17,9 +17,9 @@ export default function SignUpPage() {
   const { login } = useAuth()
   const [activeTab, setActiveTab] = useState("login")
   const [formData, setFormData] = useState({
-    name: "",
+    first_name: "",
+    last_name: "",
     email: "",
-    nin: "",
     password: "",
     confirmPassword: "",
     role: "citizen" as "citizen" | "organization",
@@ -48,7 +48,7 @@ export default function SignUpPage() {
     e.preventDefault()
     setError("")
 
-    if (!formData.name || !formData.email) {
+    if (!formData.first_name || !formData.last_name || !formData.email) {
       setError("Please fill in all fields")
       return
     }
@@ -66,17 +66,12 @@ export default function SignUpPage() {
     setIsLoading(true)
 
     try {
-      // Split full name into first_name and last_name
-      const nameParts = formData.name.trim().split(/\s+/)
-      const first_name = nameParts[0] || ""
-      const last_name = nameParts.slice(1).join(" ") || nameParts[0] || ""
-
       // Map frontend role to backend role format
       const user_role = formData.role.toUpperCase() === "ORGANIZATION" ? "ORGANIZATION" : "CITIZEN"
 
       const signupData = {
-        first_name,
-        last_name,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
         email: formData.email,
         password1: formData.password,
         password2: formData.confirmPassword,
@@ -90,8 +85,8 @@ export default function SignUpPage() {
         // Backend returns user_role field, and id should be included as primary key
         const userData = {
           id: String(response.user.id || ""), // Ensure id is a string
-          first_name: response.user.first_name || first_name,
-          last_name: response.user.last_name || last_name,
+          first_name: response.user.first_name || formData.first_name,
+          last_name: response.user.last_name || formData.last_name,
           email: response.user.email,
           role: (response.user.user_role || formData.role).toLowerCase(),
         }
@@ -182,18 +177,32 @@ export default function SignUpPage() {
                     </select>
                   </div>
 
-                  {/* Name Field */}
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium" style={{ color: '#004C99' }}>Full Name</label>
-                    <Input
-                      type="text"
-                      name="name"
-                      placeholder="John Doe"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      className="w-full"
-                    />
+                  {/* First & Last Name Fields */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium" style={{ color: '#004C99' }}>First Name</label>
+                      <Input
+                        type="text"
+                        name="first_name"
+                        placeholder="John"
+                        value={formData.first_name}
+                        onChange={handleChange}
+                        required
+                        className="w-full"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium" style={{ color: '#004C99' }}>Last Name</label>
+                      <Input
+                        type="text"
+                        name="last_name"
+                        placeholder="Doe"
+                        value={formData.last_name}
+                        onChange={handleChange}
+                        required
+                        className="w-full"
+                      />
+                    </div>
                   </div>
 
                   {/* Email Field */}
@@ -210,18 +219,7 @@ export default function SignUpPage() {
                     />
                   </div>
 
-                  {/* NIN Field */}
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium" style={{ color: '#004C99' }}>NIN (optional)</label>
-                    <Input
-                      type="text"
-                      name="nin"
-                      placeholder="1234 5678 9012"
-                      value={formData.nin}
-                      onChange={handleChange}
-                      className="w-full"
-                    />
-                  </div>
+                  {/* Personal info removed as requested */}
 
                   {/* Password Field */}
                   <div className="space-y-2">

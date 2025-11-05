@@ -2,41 +2,93 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Sidebar } from "@/components/sidebar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { Edit2, Save, X, MapPin, Mail, Phone, LinkIcon, Shield, Star } from "lucide-react"
+import { useAuth } from "@/lib/auth/context"
 
 export default function ProfilePage() {
+  const { user, isLoading, isAuthenticated } = useAuth()
+  const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
+  
+  // Initialize profile data with user data from auth
   const [profileData, setProfileData] = useState({
-    firstName: "John",
-    lastName: "Doe",
-    title: "Product Manager",
-    company: "Tech Innovations Inc",
-    location: "San Francisco, CA",
-    email: "john.doe@example.com",
-    phone: "+1 (555) 123-4567",
-    website: "https://johndoe.com",
-    bio: "Passionate about building products that solve real problems. 10+ years of experience in tech.",
-    verified: true,
-    trustScore: 4.8,
-    connections: 156,
-    views: 1243,
+    firstName: "",
+    lastName: "",
+    title: "",
+    company: "",
+    location: "",
+    email: "",
+    phone: "",
+    website: "",
+    bio: "",
+    verified: false,
+    trustScore: 0,
+    connections: 0,
+    views: 0,
   })
 
   const [editData, setEditData] = useState(profileData)
 
+  // Update profile data when user data is available
+  useEffect(() => {
+    if (user) {
+      setProfileData({
+        firstName: user.first_name || "",
+        lastName: user.last_name || "",
+        title: "",
+        company: "",
+        location: "",
+        email: user.email || "",
+        phone: "",
+        website: "",
+        bio: "",
+        verified: user.role === "organization" || user.role === "ORGANIZATION",
+        trustScore: 4.5,
+        connections: 0,
+        views: 0,
+      })
+      setEditData({
+        firstName: user.first_name || "",
+        lastName: user.last_name || "",
+        title: "",
+        company: "",
+        location: "",
+        email: user.email || "",
+        phone: "",
+        website: "",
+        bio: "",
+        verified: user.role === "organization" || user.role === "ORGANIZATION",
+        trustScore: 4.5,
+        connections: 0,
+        views: 0,
+      })
+    }
+  }, [user])
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push("/login")
+    }
+  }, [isLoading, isAuthenticated, router])
+
   const handleEdit = () => {
     setIsEditing(true)
-    setEditData(profileData)
+    // Sync editData with current profileData
+    setEditData({ ...profileData })
   }
 
   const handleSave = () => {
+    // TODO: Save profile data to backend API
     setProfileData(editData)
     setIsEditing(false)
+    // Here you would typically make an API call to update the profile
   }
 
   const handleCancel = () => {
@@ -46,6 +98,23 @@ export default function ProfilePage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setEditData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="flex h-screen bg-neutral-50 items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-neutral-600">Loading profile...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Show message if not authenticated (will redirect)
+  if (!isAuthenticated) {
+    return null
   }
 
   return (
@@ -65,8 +134,11 @@ export default function ProfilePage() {
                 <div className="flex flex-col sm:flex-row gap-8 mb-8">
                   <div className="flex flex-col items-center sm:items-start">
                     <div className="w-32 h-32 rounded-full border-4 border-white bg-primary/10 flex items-center justify-center text-5xl font-bold text-primary mb-4 shadow-lg">
-                      {profileData.firstName.charAt(0)}
-                      {profileData.lastName.charAt(0)}
+                      {profileData.firstName?.charAt(0)?.toUpperCase() || ""}
+                      {profileData.lastName?.charAt(0)?.toUpperCase() || ""}
+                      {!profileData.firstName && !profileData.lastName && (
+                        <span className="text-3xl">👤</span>
+                      )}
                     </div>
                     {!isEditing && (
                       <Button onClick={handleEdit} className="bg-primary hover:bg-primary-light text-white">
@@ -264,35 +336,7 @@ export default function ProfilePage() {
               </div>
             </Card>
 
-            {/* Additional Sections */}
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Skills */}
-              <Card className="p-6">
-                <h2 className="text-lg font-semibold text-primary mb-4">Skills</h2>
-                <div className="flex flex-wrap gap-2">
-                  {["Product Strategy", "User Research", "Data Analysis", "Team Leadership", "Agile"].map((skill) => (
-                    <span key={skill} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </Card>
-
-              {/* Experience */}
-              <Card className="p-6">
-                <h2 className="text-lg font-semibold text-primary mb-4">Experience</h2>
-                <div className="space-y-4">
-                  <div>
-                    <p className="font-semibold text-primary">Senior Product Manager</p>
-                    <p className="text-sm text-neutral-600">Tech Innovations Inc • 2020 - Present</p>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-primary">Product Manager</p>
-                    <p className="text-sm text-neutral-600">Digital Solutions • 2018 - 2020</p>
-                  </div>
-                </div>
-              </Card>
-            </div>
+            {/* Additional sections removed as requested */}
           </div>
         </div>
       </main>
