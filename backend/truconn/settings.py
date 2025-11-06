@@ -68,7 +68,7 @@ WSGI_APPLICATION = 'truconn.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.config("DATABASE_URL", "sqlite:///db.sqlite3")
+        default=os.getenv("DATABASE_URL", "sqlite:///db.sqlite3")
     )
 }
 
