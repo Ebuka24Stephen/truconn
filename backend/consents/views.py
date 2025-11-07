@@ -31,3 +31,4 @@ class UserConsentView(APIView):
             'consent': consent.name,
             'access': user_consent.access
         }, status=status.HTTP_200_OK)
+    

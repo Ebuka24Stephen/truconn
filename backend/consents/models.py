@@ -18,4 +18,3 @@ class UserConsent(models.Model):
     class Meta:
         unique_together = ('user', 'consent')
     
-    
