@@ -29,8 +29,6 @@ class LoginView(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
-            email = serializer.validated_data['email']
-            password = serializer.validated_data['password']
             user = serializer.validated_data['user']
             if user is not None:
                 login(request, user)
