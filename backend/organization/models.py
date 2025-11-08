@@ -2,9 +2,13 @@ from django.db import models
 from django.conf import settings
 from accounts.models import CustomUser, Profile
 from consents.models import Consent, UserConsent
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 class Org(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, limit_choices_to={'user_role': 'organization'})
+
     name = models.CharField(max_length=100, unique=True)
     email = models.EmailField(unique=True)
     website = models.URLField(blank=True, null=True)
