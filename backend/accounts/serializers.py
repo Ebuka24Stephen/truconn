@@ -3,7 +3,6 @@ from .models import Profile, CustomUser
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import authenticate
 from organization.models import Org
-from django.db import transaction
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -42,8 +41,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Email already in use')
         return value
 
- 
-
     def create(self, validated_data):
         password = validated_data.pop('password1')
         validated_data.pop('password2')
@@ -56,30 +53,23 @@ class RegisterSerializer(serializers.ModelSerializer):
                 last_name=validated_data.get('last_name'),
                 user_role='CITIZEN'
             )
-            user.set_password(password)
-            user.save()
-            return user
+        else:
+            user = CustomUser.objects.create(
+                email=validated_data['email'],
+                user_role='ORGANIZATION'
+            )
+            Org.objects.create(
+                user=user,
+                name=validated_data.get('name'),
+                website=validated_data.get('website', ''),
+                address=validated_data.get('address', ''),
+                email=validated_data['email']
+            )
 
-        elif user_role == 'ORGANIZATION':
-            # Wrap user + Org creation in a transaction
-            with transaction.atomic():
-                user = CustomUser.objects.create(
-                    email=validated_data['email'],
-                    user_role='ORGANIZATION'
-                )
-                user.set_password(password)
-                user.save()
-
-                Org.objects.create(
-                    user=user,
-                    name=validated_data.get('name'),
-                    website=validated_data.get('website', ''),
-                    address=validated_data.get('address', ''),
-                    email=validated_data['email']
-                )
-
-            return user
-        
+        user.set_password(password)
+        user.save()
+        return user
+    
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
