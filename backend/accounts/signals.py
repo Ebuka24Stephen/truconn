@@ -4,5 +4,5 @@ from .models import CustomUser, Profile
 
 @receiver(post_save, sender=CustomUser)
 def create_profile(sender, instance, created, **kwargs):
-    if created:
+    if created and instance.user_role == 'CITIZEN':
         Profile.objects.get_or_create(user=instance)

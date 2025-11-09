@@ -27,14 +27,7 @@ class ConsentRequestView(APIView):
             consent=consent,
             defaults={'status': 'PENDING'},
         )
-        if access_request.status == 'APPROVED':
-            serializer = AccessRequestSerializer(access_request)
-            return Response({
-                "message": "Access is already approved.",
-                "data": serializer.data
-            }, status=status.HTTP_200_OK)
-
-        access_request.status = 'APPROVED'
+        
         access_request.save()
 
         serializer = AccessRequestSerializer(access_request)
