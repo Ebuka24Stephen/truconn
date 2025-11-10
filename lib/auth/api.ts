@@ -78,8 +78,8 @@ export class AuthAPI {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(credentials),
-        // Add credentials for CORS
-        credentials: "omit",
+        // Include cookies for session authentication
+        credentials: "include",
       })
 
       // Handle network errors
@@ -122,8 +122,8 @@ export class AuthAPI {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-        // Add credentials for CORS
-        credentials: "omit",
+        // Include cookies for session authentication
+        credentials: "include",
       })
 
       // Handle network errors
