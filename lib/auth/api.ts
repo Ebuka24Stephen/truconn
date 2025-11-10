@@ -6,12 +6,16 @@ export interface LoginCredentials {
 }
 
 export interface SignupData {
-  first_name: string
-  last_name: string
+  first_name?: string
+  last_name?: string
   email: string
   password1: string
   password2: string
   user_role: "CITIZEN" | "ORGANIZATION"
+  // Organization fields
+  name?: string
+  website?: string
+  address?: string
 }
 
 export interface User {

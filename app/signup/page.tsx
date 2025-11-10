@@ -23,6 +23,10 @@ export default function SignUpPage() {
     password: "",
     confirmPassword: "",
     role: "citizen" as "citizen" | "organization",
+    // Organization fields
+    name: "",
+    website: "",
+    address: "",
   })
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -48,9 +52,17 @@ export default function SignUpPage() {
     e.preventDefault()
     setError("")
 
-    if (!formData.first_name || !formData.last_name || !formData.email) {
-      setError("Please fill in all fields")
-      return
+    // Validate based on role
+    if (formData.role === "citizen") {
+      if (!formData.first_name || !formData.last_name || !formData.email) {
+        setError("Please fill in all required fields")
+        return
+      }
+    } else if (formData.role === "organization") {
+      if (!formData.name || !formData.email || !formData.address) {
+        setError("Please fill in all required fields (Company name, Email, and Address)")
+        return
+      }
     }
 
     if (!isPasswordValid) {
@@ -69,13 +81,21 @@ export default function SignUpPage() {
       // Map frontend role to backend role format
       const user_role = formData.role.toUpperCase() === "ORGANIZATION" ? "ORGANIZATION" : "CITIZEN"
 
-      const signupData = {
-        first_name: formData.first_name,
-        last_name: formData.last_name,
+      const signupData: any = {
         email: formData.email,
         password1: formData.password,
         password2: formData.confirmPassword,
         user_role: user_role as "CITIZEN" | "ORGANIZATION",
+      }
+
+      // Add role-specific fields
+      if (formData.role === "citizen") {
+        signupData.first_name = formData.first_name
+        signupData.last_name = formData.last_name
+      } else {
+        signupData.name = formData.name
+        signupData.website = formData.website || ""
+        signupData.address = formData.address
       }
 
       const response = await AuthAPI.signup(signupData)
@@ -85,8 +105,8 @@ export default function SignUpPage() {
         // Backend returns user_role field, and id should be included as primary key
         const userData = {
           id: String(response.user.id || ""), // Ensure id is a string
-          first_name: response.user.first_name || formData.first_name,
-          last_name: response.user.last_name || formData.last_name,
+          first_name: response.user.first_name || (formData.role === "citizen" ? formData.first_name : ""),
+          last_name: response.user.last_name || (formData.role === "citizen" ? formData.last_name : ""),
           email: response.user.email,
           role: (response.user.user_role || formData.role).toLowerCase(),
         }
@@ -177,33 +197,57 @@ export default function SignUpPage() {
                     </select>
                   </div>
 
-                  {/* First & Last Name Fields */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium" style={{ color: '#004C99' }}>First Name</label>
-                      <Input
-                        type="text"
-                        name="first_name"
-                        placeholder="John"
-                        value={formData.first_name}
-                        onChange={handleChange}
-                        required
-                        className="w-full"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium" style={{ color: '#004C99' }}>Last Name</label>
-                      <Input
-                        type="text"
-                        name="last_name"
-                        placeholder="Doe"
-                        value={formData.last_name}
-                        onChange={handleChange}
-                        required
-                        className="w-full"
-                      />
-                    </div>
-                  </div>
+                  {/* Citizen Fields */}
+                  {formData.role === "citizen" && (
+                    <>
+                      {/* First & Last Name Fields */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium" style={{ color: '#004C99' }}>First Name</label>
+                          <Input
+                            type="text"
+                            name="first_name"
+                            placeholder="John"
+                            value={formData.first_name}
+                            onChange={handleChange}
+                            required
+                            className="w-full"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium" style={{ color: '#004C99' }}>Last Name</label>
+                          <Input
+                            type="text"
+                            name="last_name"
+                            placeholder="Doe"
+                            value={formData.last_name}
+                            onChange={handleChange}
+                            required
+                            className="w-full"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Organization Fields */}
+                  {formData.role === "organization" && (
+                    <>
+                      {/* Company Name */}
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium" style={{ color: '#004C99' }}>Company Name</label>
+                        <Input
+                          type="text"
+                          name="name"
+                          placeholder="Acme Corporation"
+                          value={formData.name}
+                          onChange={handleChange}
+                          required
+                          className="w-full"
+                        />
+                      </div>
+                    </>
+                  )}
 
                   {/* Email Field */}
                   <div className="space-y-2">
@@ -218,6 +262,38 @@ export default function SignUpPage() {
                       className="w-full"
                     />
                   </div>
+
+                  {/* Organization-specific fields */}
+                  {formData.role === "organization" && (
+                    <>
+                      {/* Website Field */}
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium" style={{ color: '#004C99' }}>Website</label>
+                        <Input
+                          type="url"
+                          name="website"
+                          placeholder="https://www.example.com"
+                          value={formData.website}
+                          onChange={handleChange}
+                          className="w-full"
+                        />
+                      </div>
+
+                      {/* Address Field */}
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium" style={{ color: '#004C99' }}>Address</label>
+                        <Input
+                          type="text"
+                          name="address"
+                          placeholder="123 Main Street, City, State, ZIP"
+                          value={formData.address}
+                          onChange={handleChange}
+                          required
+                          className="w-full"
+                        />
+                      </div>
+                    </>
+                  )}
 
                   {/* Personal info removed as requested */}
 
