@@ -244,20 +244,27 @@ Response (201 created)
     "avatar": null
   }
 }
--------------------------------------------------------------------------------------------------
 
 
 **Profile**
 GET /api/auth/profile/
---------------------------------------------------------------------------------------------------
+
 **Updating profile**
 PUT /api/auth/profile
---------------------------------------------------------------------------------------------------
 
-## **Consent Management**
 GET /api/consents/ 
 **It lists all available consent categories**
-----------------------------------------------------------------------------------------------------
 
 POST /api/consents/consent_id/toggle/
 **Authenticated users can grant or revoke consent**
+
+
+
+ POST /api/organization/consent/<uuid:user_id>/<int:consent_id>/request/
+**Organization sends a request for data access to a specified user as long as the user allows access to the data. But if the user doesn't allow access, it throws a 500 BAD Request and and error message: "error": "User has not granted this consent."**
+
+GET /api/organization/requested-consent/
+**Authenticated users can check to see which organization sent a request for data access**
+
+POST /api/organization/consent/<int:access_id>/toggle-access/
+**Users can Approve or Revoke requests sent by organizations depending on its status**

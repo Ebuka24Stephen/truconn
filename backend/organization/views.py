@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, get_object_or_404
 from .models import AccessRequest, Org
 from rest_framework.response import Response
@@ -7,7 +8,9 @@ from .serializers import AccessRequestSerializer, OrganizationSerializer
 from rest_framework import status
 from consents.models import Consent, UserConsent
 from accounts.models import CustomUser
-from .permissions import IsOrganization
+from .permissions import IsOrganization  
+
+
 
 class ConsentRequestView(APIView):
     permission_classes = [IsAuthenticated, IsOrganization]
@@ -42,7 +45,6 @@ class RequestedConsentView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # Get all access requests made by organizations to the authenticated user
         access_requests = AccessRequest.objects.filter(user=request.user)
 
         if not access_requests.exists():
@@ -59,3 +61,17 @@ class RequestedConsentView(APIView):
         }, status=status.HTTP_200_OK)
 
 
+class ConsentRevocationView(APIView):
+    def post(self, request, access_id):
+        access_requests = get_object_or_404(AccessRequest, pk=access_id, user=request.user)
+        if access_requests.status != 'APPROVED':
+            access_requests.status = 'APPROVED'
+            access_requests.save()
+            access_requests_serializer = AccessRequestSerializer(access_requests)
+            return Response({'message':'Consent Granted!'})
+        
+        else:
+            access_requests.status = 'REVOKED'
+            access_requests.save()
+            access_requests_serializer = AccessRequestSerializer(access_requests)
+            return Response({'message':'Consent Revoked!'})

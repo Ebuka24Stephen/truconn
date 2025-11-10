@@ -18,3 +18,5 @@ class UserConsent(models.Model):
     class Meta:
         unique_together = ('user', 'consent')
     
+    def __str__(self):
+        return f"{self.user.first_name} --- Data type: {self.consent.name} --- Access: {self.access}"
