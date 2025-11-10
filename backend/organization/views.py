@@ -21,7 +21,7 @@ class ConsentRequestView(APIView):
         if not user_consent:
             return Response(
                 {"error": "User has not granted this consent."},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_404_NOT_FOUND
             )
         organization = Org.objects.get(user=request.user)
         access_request, created = AccessRequest.objects.get_or_create(
