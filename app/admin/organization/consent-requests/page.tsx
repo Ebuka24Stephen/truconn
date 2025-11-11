@@ -66,19 +66,21 @@ export default function ConsentRequestsPage() {
     status: string
   }> = useMemo(() => {
     const rows: any[] = []
-    citizens.forEach((c) => {
-      c.access_requests.forEach((r, idx) => {
-        rows.push({
-          id: `${c.id}-${idx}-${r.requested_at}`,
-          citizenId: c.id,
-          citizenName: c.full_name,
-          dataType: r.consent,
-          purpose: r.purpose,
-          requestedAt: r.requested_at,
-          status: r.status.toLowerCase(),
+    if (Array.isArray(citizens)) {
+      citizens.forEach((c) => {
+        (c.access_requests || []).forEach((r, idx) => {
+          rows.push({
+            id: `${c.id}-${idx}-${r.requested_at}`,
+            citizenId: c.id,
+            citizenName: c.full_name,
+            dataType: r.consent,
+            purpose: r.purpose,
+            requestedAt: r.requested_at,
+            status: (r.status || "").toLowerCase(),
+          })
         })
       })
-    })
+    }
     return rows
   }, [citizens])
 

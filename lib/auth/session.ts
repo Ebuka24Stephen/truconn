@@ -3,7 +3,8 @@
 import { User } from "./api"
 
 const USER_KEY = "truconn_user"
-const TOKEN_KEY = "truconn_token"
+const TOKEN_KEY = "truconn_token" // legacy CSRF or misc token
+const JWT_TOKEN_KEY = "truconn_jwt"
 const COOKIE_USER_KEY = "truconn_user"
 
 export interface SessionData {
@@ -57,15 +58,27 @@ export class SessionManager {
     }
   }
 
+  static setJwtToken(token: string): void {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(JWT_TOKEN_KEY, token)
+    }
+  }
+
   static getToken(): string | null {
     if (typeof window === "undefined") return null
     return localStorage.getItem(TOKEN_KEY)
+  }
+
+  static getJwtToken(): string | null {
+    if (typeof window === "undefined") return null
+    return localStorage.getItem(JWT_TOKEN_KEY)
   }
 
   static clearSession(): void {
     if (typeof window !== "undefined") {
       localStorage.removeItem(USER_KEY)
       localStorage.removeItem(TOKEN_KEY)
+      localStorage.removeItem(JWT_TOKEN_KEY)
       
       // Clear cookie
       document.cookie = `${COOKIE_USER_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`

@@ -45,7 +45,8 @@ export class OrganizationAPI {
         throw new Error(errorData.error || errorData.detail || errorData.message || "Failed to fetch citizens")
       }
 
-      return await response.json()
+      const data = await response.json()
+      return Array.isArray(data) ? data : []
     } catch (error) {
       if (error instanceof TypeError && error.message.includes("fetch")) {
         throw new Error("Failed to connect to server. Please check your internet connection.")

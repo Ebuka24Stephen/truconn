@@ -34,11 +34,13 @@ export function getApiHeaders(): HeadersInit {
   // Prefer JWT Bearer token; fallback to CSRF for session-based endpoints
   if (typeof window !== 'undefined') {
     try {
-      const jwt = window.localStorage.getItem('truconn_token')
+      const jwt = window.localStorage.getItem('truconn_jwt')
       if (jwt) {
         headers['Authorization'] = `Bearer ${jwt}`
       } else {
-        const csrfToken = getCsrfToken()
+        // Legacy token (may contain CSRF from earlier versions)
+        const legacy = window.localStorage.getItem('truconn_token')
+        const csrfToken = getCsrfToken() || legacy || null
         if (csrfToken) {
           headers['X-CSRFToken'] = csrfToken
         }

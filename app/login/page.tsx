@@ -42,7 +42,8 @@ function LoginForm() {
 
         // Persist JWT access token when provided (preferred over CSRF/session for API)
         if ((response as any).access) {
-          SessionManager.setToken((response as any).access)
+          // Store JWT for Authorization header
+          SessionManager.setJwtToken((response as any).access)
         } else {
           // Fallback: persist CSRF token for session-based POST/PUT if needed
           const csrf = getCsrfToken()
