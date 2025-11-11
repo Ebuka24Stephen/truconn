@@ -36,9 +36,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -138,6 +137,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:3000',
 ]
 
+# For development, allow all origins (remove in production if needed)
+# Uncomment the line below if you need to allow all origins during development
 # CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_METHODS = [
@@ -168,15 +169,21 @@ CORS_PREFLIGHT_MAX_AGE = 86400
 
 
 
+
+
 # CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = [
     'https://truconn.vercel.app',
-    'https://truconn.onrender.com',  # backend domain
+    'https://truconn.onrender.com',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
 ]
 
-
-# Cookies configuration
+# Cookies configuration for cross-site sessions
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_HTTPONLY = False
 
-CSRF_COOKIE_HTTPONLY = 'False'
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = "None"
+
