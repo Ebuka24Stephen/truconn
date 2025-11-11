@@ -85,3 +85,25 @@ POST /api/organization/consent/<int:access_id>/toggle-access/
 
 GET /api/consents/transparency-log/
 **Lists all access requests made by organizations to the logged-in user**
+
+
+
+
+
+
+{
+    "message": "Consent requests retrieved successfully.",
+    "count": 1,
+    "data": [
+        {
+            "id": 7,
+            "organizationId": 1,
+            "organizationName": "Akube Holdings",
+            "dataType": "Fianacial",
+            "lastAccessed": "2025-11-11T17:54:38.626650Z",
+            "purpose": "for auth",
+            "status": "PENDING",
+            "consentId": 1
+        }
+    ]
+}
