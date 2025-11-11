@@ -17,7 +17,7 @@ class ConsentApiView(APIView):
 
 
 class UserConsentView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = []
     def post(self, request, consent_id):
         if not request.user.is_authenticated:
             return Response({"error": "Please log in to manage consents"}, status=status.HTTP_401_UNAUTHORIZED)
