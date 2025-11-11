@@ -72,8 +72,22 @@ export interface UpdateProfileData {
 }
 
 export class AuthAPI {
+  static async ensureCsrf(): Promise<void> {
+    try {
+      await fetch(`${API_BASE_URL}/csrf/`, {
+        method: "GET",
+        credentials: "include",
+      })
+    } catch {
+      // ignore; endpoint is best-effort to set cookie
+    }
+  }
+
   static async login(credentials: LoginCredentials): Promise<LoginResponse> {
     try {
+      // Ensure a CSRF cookie exists before POST
+      await AuthAPI.ensureCsrf()
+
       const response = await fetch(`${API_BASE_URL}/login/`, {
         method: "POST",
         headers: getApiHeaders(),
@@ -116,6 +130,9 @@ export class AuthAPI {
 
   static async signup(data: SignupData): Promise<SignupResponse> {
     try {
+      // Ensure a CSRF cookie exists before POST
+      await AuthAPI.ensureCsrf()
+
       const response = await fetch(`${API_BASE_URL}/signup/`, {
         method: "POST",
         headers: getApiHeaders(),
@@ -248,6 +265,29 @@ export class AuthAPI {
       if (error instanceof TypeError && error.message.includes("fetch")) {
         throw new Error("Failed to connect to server. Please check your internet connection.")
       }
+      throw error
+    }
+  }
+
+  /**
+   * Logout current session
+   * POST /api/auth/logout/
+   */
+  static async logout(): Promise<void> {
+    try {
+      // Ensure CSRF cookie exists for POST
+      await AuthAPI.ensureCsrf()
+      const response = await fetch(`${API_BASE_URL}/logout/`, {
+        method: "POST",
+        headers: getApiHeaders(),
+        credentials: "include",
+      })
+      if (!response.ok) {
+        throw new Error("Failed to log out")
+      }
+    } catch (error) {
+      // swallow errors to avoid trapping user in logged-in UI if server failed
+      // Consumers may choose to ignore logout failures
       throw error
     }
   }
