@@ -10,18 +10,19 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
 
 class AccessRequestSerializer(serializers.ModelSerializer):
-    organization = serializers.SerializerMethodField()
+    organization_name = serializers.SerializerMethodField()
     data_type = serializers.SerializerMethodField()
+
     class Meta:
         model = AccessRequest
-        fields = ['organization', 'data_type', 'requested_at', 'purpose', 'status']
+        fields = ['organization_name', 'data_type', 'requested_at', 'purpose', 'status']
 
     def get_organization_name(self, obj):
         return obj.organization.name
 
-    def get_consent_name(self, obj):
+    def get_data_type(self, obj):
         return obj.consent.name
-    
+
 class CitizenListSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
     access_requests = serializers.SerializerMethodField()
