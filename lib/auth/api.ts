@@ -30,6 +30,9 @@ export interface User {
 
 export interface LoginResponse {
   user: User
+  access?: string
+  refresh?: string
+  csrfToken?: string
 }
 
 export interface SignupResponse {
@@ -118,7 +121,8 @@ export class AuthAPI {
         throw new Error(errorMessage)
       }
 
-      return await response.json()
+      const data = await response.json()
+      return data
     } catch (error) {
       // Handle network/CORS errors
       if (error instanceof TypeError && error.message.includes("fetch")) {

@@ -36,6 +36,9 @@ class LoginView(APIView):
             if user is not None:
                 login(request, user)
                 csrf_token = get_token(request)
+                # Issue JWT tokens for API clients
+                refresh = RefreshToken.for_user(user)
+                access_token = str(refresh.access_token)
 
                 return Response({
                     "user": {
@@ -45,7 +48,9 @@ class LoginView(APIView):
                         "email": user.email,
                         "role": user.user_role
                     },
-                    "csrfToken": csrf_token
+                    "csrfToken": csrf_token,
+                    "access": access_token,
+                    "refresh": str(refresh)
 
                 }, status=status.HTTP_200_OK)
             return Response({"error": "Invalid email or password."}, status=status.HTTP_401_UNAUTHORIZED)

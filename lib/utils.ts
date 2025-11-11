@@ -31,18 +31,21 @@ export function getApiHeaders(): HeadersInit {
     'Content-Type': 'application/json',
   }
   
-  // Prefer CSRF from cookie; fallback to localStorage (persisted after login)
-  let csrfToken = getCsrfToken()
-  if (!csrfToken && typeof window !== 'undefined') {
+  // Prefer JWT Bearer token; fallback to CSRF for session-based endpoints
+  if (typeof window !== 'undefined') {
     try {
-      const stored = window.localStorage.getItem('truconn_token')
-      if (stored) csrfToken = stored
+      const jwt = window.localStorage.getItem('truconn_token')
+      if (jwt) {
+        headers['Authorization'] = `Bearer ${jwt}`
+      } else {
+        const csrfToken = getCsrfToken()
+        if (csrfToken) {
+          headers['X-CSRFToken'] = csrfToken
+        }
+      }
     } catch {
       // ignore storage errors
     }
-  }
-  if (csrfToken) {
-    headers['X-CSRFToken'] = csrfToken
   }
   
   return headers

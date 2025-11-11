@@ -40,10 +40,15 @@ function LoginForm() {
         }
         login(userData)
 
-        // Persist CSRF token to session for subsequent API calls (useful for POST/PUT)
-        const csrf = getCsrfToken()
-        if (csrf) {
-          SessionManager.setToken(csrf)
+        // Persist JWT access token when provided (preferred over CSRF/session for API)
+        if ((response as any).access) {
+          SessionManager.setToken((response as any).access)
+        } else {
+          // Fallback: persist CSRF token for session-based POST/PUT if needed
+          const csrf = getCsrfToken()
+          if (csrf) {
+            SessionManager.setToken(csrf)
+          }
         }
         
         // Check for redirect parameter
