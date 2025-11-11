@@ -55,7 +55,7 @@ class LoginView(APIView):
 
 
 class ProfileView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     def get(self, request):
         profile = get_object_or_404(Profile.objects.select_related('user'), user=request.user)
         profile_serializer = ProfileSerializer(profile)
