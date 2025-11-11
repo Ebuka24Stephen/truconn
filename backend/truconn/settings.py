@@ -36,8 +36,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -167,3 +168,15 @@ CORS_PREFLIGHT_MAX_AGE = 86400
 
 
 
+# CSRF trusted origins
+CSRF_TRUSTED_ORIGINS = [
+    'https://truconn.vercel.app',
+    'https://truconn.onrender.com',  # backend domain
+]
+
+
+# Cookies configuration
+SESSION_COOKIE_SECURE = True 
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'  
+SESSION_COOKIE_SAMESITE = 'None'
