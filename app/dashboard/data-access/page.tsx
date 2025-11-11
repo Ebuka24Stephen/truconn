@@ -82,18 +82,18 @@ export default function DataAccessPage() {
       const map = Object.keys(consentMap).length > 0 ? consentMap : await loadConsents()
       
       const response = await OrganizationAPI.getRequestedConsents()
-      const list: AccessRequest[] = Array.isArray((response as any)?.data) ? (response as any).data : (Array.isArray(response) ? (response as any) : [])
+      const list: AccessRequest[] = response.data || []
       
-      // Map backend AccessRequest to frontend DataAccessItem
+      // Backend serializer already returns the correct format
       const mappedData: DataAccessItem[] = list.map((request: AccessRequest) => ({
         id: request.id,
-        organizationId: request.organization,
-        organizationName: `Organization ${request.organization}`, // Will be enhanced when backend includes org name
-        dataType: map[request.consent] || `Consent ${request.consent}`,
-        lastAccessed: request.requested_at,
+        organizationId: request.organizationId,
+        organizationName: request.organizationName,
+        dataType: request.dataType,
+        lastAccessed: request.lastAccessed,
         purpose: request.purpose || "Data access request",
         status: request.status === "APPROVED" ? "active" : request.status === "REVOKED" ? "revoked" : "pending",
-        consentId: request.consent,
+        consentId: request.consentId,
       }))
       
       setDataAccess(mappedData)
@@ -235,7 +235,7 @@ export default function DataAccessPage() {
                               <Badge variant="outline">{item.dataType}</Badge>
                             </TableCell>
                             <TableCell className="text-sm text-neutral-500">
-                              {new Date(item.lastAccessed).toLocaleDateString()}
+                              {item.lastAccessed ? new Date(item.lastAccessed).toLocaleDateString() : "N/A"}
                             </TableCell>
                             <TableCell className="text-sm">{item.purpose}</TableCell>
                             <TableCell>

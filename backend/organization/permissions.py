@@ -6,4 +6,4 @@ class IsOrganization(BasePermission):
         return request.user.is_authenticated and request.user.user_role == 'ORGANIZATION'
 class IsCitizen(BasePermission):
     def has_permission(self, request, view):
-        return request.user.user_role == "CITIZEN"
+        return request.user.is_authenticated and request.user.user_role == "CITIZEN"

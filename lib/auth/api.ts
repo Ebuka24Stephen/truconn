@@ -81,6 +81,7 @@ export class AuthAPI {
         method: "POST",
         headers: getApiHeaders(),
         body: JSON.stringify(credentials),
+        credentials: "include",
       })
 
       // Handle network errors
@@ -122,6 +123,7 @@ export class AuthAPI {
         method: "POST",
         headers: getApiHeaders(),
         body: JSON.stringify(data),
+        credentials: "include",
       })
 
       // Handle network errors
@@ -171,6 +173,7 @@ export class AuthAPI {
       const response = await fetch(`${API_BASE_URL}/profile/`, {
         method: "GET",
         headers: getApiHeaders(),
+        credentials: "include",
       })
 
       if (!response.ok) {
@@ -211,6 +214,7 @@ export class AuthAPI {
         method: "PUT",
         headers: getApiHeaders(),
         body: JSON.stringify(data),
+        credentials: "include",
       })
 
       if (!response.ok) {
@@ -259,6 +263,7 @@ export class AuthAPI {
       const response = await fetch(`${API_BASE_URL}/logout/`, {
         method: "POST",
         headers: getApiHeaders(),
+        credentials: "include",
       })
       if (!response.ok) {
         throw new Error("Failed to log out")

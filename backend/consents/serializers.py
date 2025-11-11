@@ -5,7 +5,7 @@ from rest_framework import serializers
 class ConsentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Consent 
-        fields = ['name']
+        fields = ['id', 'name', 'created_at']
 
 class UserConsentSerializer(serializers.ModelSerializer):
     class Meta:

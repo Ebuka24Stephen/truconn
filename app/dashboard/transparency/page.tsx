@@ -52,10 +52,10 @@ export default function TransparencyLogPage() {
       setIsLoading(true)
       setError("")
       const response = await ConsentsAPI.getTransparencyLog()
-      const items: TransparencyItem[] = (response.data || []).map((item) => ({
+      const items: TransparencyItem[] = (response.data || []).map((item: any) => ({
         id: item.id,
-        organizationName: `Organization ${item.organization}`, // backend doesn't include name yet
-        dateTime: item.requested_at,
+        organizationName: item.organizationName || `Organization ${item.organizationId || 'Unknown'}`,
+        dateTime: item.lastAccessed || item.requested_at,
         purpose: item.purpose || "Data access",
         accessType: item.status === "APPROVED" ? "Read" : item.status === "REVOKED" ? "Delete" : "Read",
       }))

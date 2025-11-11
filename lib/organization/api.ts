@@ -4,12 +4,13 @@ const API_BASE_URL = "https://truconn.onrender.com/api"
 
 export interface AccessRequest {
   id: number
-  organization: number
-  user: number
-  consent: number
-  status: "PENDING" | "APPROVED" | "REVOKED"
-  requested_at: string
+  organizationId: number
+  organizationName: string
+  dataType: string
+  lastAccessed: string
   purpose: string
+  status: "PENDING" | "APPROVED" | "REVOKED"
+  consentId: number
 }
 
 export interface RequestedConsentResponse {
@@ -63,6 +64,7 @@ export class OrganizationAPI {
       const response = await fetch(`${API_BASE_URL}/organization/requested-consent/`, {
         method: "GET",
         headers: getApiHeaders(),
+        credentials: "include",
       })
 
       if (!response.ok) {
@@ -103,6 +105,7 @@ export class OrganizationAPI {
         method: "POST",
         headers: getApiHeaders(),
         body: JSON.stringify({ purpose }),
+        credentials: "include",
       })
 
       if (!response.ok) {
@@ -154,6 +157,7 @@ export class OrganizationAPI {
       const response = await fetch(`${API_BASE_URL}/organization/consent/${accessId}/toggle-access/`, {
         method: "POST",
         headers: getApiHeaders(),
+        credentials: "include",
       })
 
       if (!response.ok) {

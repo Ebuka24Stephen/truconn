@@ -16,6 +16,24 @@ class ConsentApiView(APIView):
         return Response(consent_serializer.data, status=status.HTTP_200_OK)
 
 
+class UserConsentsStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        consents = Consent.objects.all()
+        user_consents = UserConsent.objects.filter(user=request.user)
+        consent_status_map = {uc.consent_id: uc.access for uc in user_consents}
+        
+        result = []
+        for consent in consents:
+            result.append({
+                'id': consent.id,
+                'name': consent.name,
+                'access': consent_status_map.get(consent.id, False)
+            })
+        
+        return Response(result, status=status.HTTP_200_OK)
+
+
 class UserConsentView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request, consent_id):

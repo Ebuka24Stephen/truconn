@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { LayoutDashboard, FileCheck, Database, Shield, FileText, Settings, LogOut } from "lucide-react"
+import { LayoutDashboard, FileCheck, Database, Shield, FileText, Settings, LogOut, User } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/lib/auth/context"
 
@@ -22,6 +22,7 @@ export function OrganizationSidebar() {
     { href: "/admin/organization/data-logs", label: "Data Access Logs", icon: Database },
     { href: "/admin/organization/compliance", label: "Compliance Scanner", icon: Shield },
     { href: "/admin/organization/reports", label: "Reports & Analytics", icon: FileText },
+    { href: "/profile", label: "Profile", icon: User },
     { href: "/settings", label: "Settings", icon: Settings },
   ]
 

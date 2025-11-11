@@ -41,14 +41,15 @@ export default function ConsentManagementPage() {
     try {
       setIsLoading(true)
       setError("")
-      const consentCategories = await ConsentsAPI.getConsents()
+      
+      // Fetch consents with user status
+      const consentsWithStatus = await ConsentsAPI.getUserConsentsStatus()
       
       // Map backend consents to frontend format
-      // Note: We don't have user consent status from the initial fetch,
-      // so we'll initialize all as false and update when toggled
-      const mappedConsents: ConsentWithStatus[] = consentCategories.map((consent) => ({
-        ...consent,
-        allowed: false, // Will be updated when we fetch user consents or toggle
+      const mappedConsents: ConsentWithStatus[] = consentsWithStatus.map((consent) => ({
+        id: consent.id,
+        name: consent.name,
+        allowed: consent.access,
         organizations: [],
         duration: "Ongoing",
         details: `Manage access to your ${consent.name.toLowerCase()} data`,

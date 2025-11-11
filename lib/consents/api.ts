@@ -14,6 +14,12 @@ export interface UserConsentResponse {
   access: boolean
 }
 
+export interface ConsentWithStatus {
+  id: number
+  name: string
+  access: boolean
+}
+
 export class ConsentsAPI {
   /**
    * Get all available consent categories
@@ -24,6 +30,7 @@ export class ConsentsAPI {
       const response = await fetch(`${API_BASE_URL}/consents/`, {
         method: "GET",
         headers: getApiHeaders(),
+        credentials: "include",
       })
 
       if (!response.ok) {
@@ -55,6 +62,46 @@ export class ConsentsAPI {
   }
 
   /**
+   * Get user consent status for all consents
+   * GET /api/consents/status/
+   */
+  static async getUserConsentsStatus(): Promise<ConsentWithStatus[]> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/consents/status/`, {
+        method: "GET",
+        headers: getApiHeaders(),
+        credentials: "include",
+      })
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Please log in to view your consent status")
+        }
+        if (response.status === 502) {
+          throw new Error("Backend service is currently unavailable. Please try again later.")
+        }
+        
+        let errorData
+        try {
+          errorData = await response.json()
+        } catch {
+          throw new Error(`Failed to fetch consent status: ${response.status}`)
+        }
+        
+        const errorMessage = errorData.error || errorData.detail || errorData.message || "Failed to fetch consent status"
+        throw new Error(errorMessage)
+      }
+
+      return await response.json()
+    } catch (error) {
+      if (error instanceof TypeError && error.message.includes("fetch")) {
+        throw new Error("Failed to connect to server. Please check your internet connection.")
+      }
+      throw error
+    }
+  }
+
+  /**
    * Get citizen transparency log
    * GET /api/consents/transparency-log/
    */
@@ -63,6 +110,7 @@ export class ConsentsAPI {
       const response = await fetch(`${API_BASE_URL}/consents/transparency-log/`, {
         method: "GET",
         headers: getApiHeaders(),
+        credentials: "include",
       })
 
       if (!response.ok) {
@@ -102,6 +150,7 @@ export class ConsentsAPI {
       const response = await fetch(`${API_BASE_URL}/consents/${consentId}/toggle/`, {
         method: "POST",
         headers: getApiHeaders(),
+        credentials: "include",
       })
 
       if (!response.ok) {
