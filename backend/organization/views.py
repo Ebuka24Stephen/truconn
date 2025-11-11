@@ -8,7 +8,7 @@ from .serializers import AccessRequestSerializer, OrganizationSerializer, Citize
 from rest_framework import status
 from consents.models import Consent, UserConsent
 from accounts.models import CustomUser
-from .permissions import IsOrganization  
+from .permissions import IsOrganization, IsCitizen
 from .send_mail import send_access_request_email
 
 
@@ -42,17 +42,15 @@ class ConsentRequestView(APIView):
 
 #Authenticated users can check to see which organization sent a request for data access
 class RequestedConsentView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsCitizen]
 
     def get(self, request):
         access_requests = AccessRequest.objects.filter(user=request.user)
-
         if not access_requests.exists():
             return Response(
                 {"message": "No consent requests found."},
                 status=status.HTTP_200_OK
             )
-
         serializer = AccessRequestSerializer(access_requests, many=True)
         return Response({
             "message": "Consent requests retrieved successfully.",
