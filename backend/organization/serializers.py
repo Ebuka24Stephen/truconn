@@ -8,20 +8,42 @@ class OrganizationSerializer(serializers.ModelSerializer):
         model = Org
         fields = '__all__'
 
-
 class AccessRequestSerializer(serializers.ModelSerializer):
-    organization_name = serializers.SerializerMethodField()
-    data_type = serializers.SerializerMethodField()
+    organizationName = serializers.SerializerMethodField()
+    organizationId = serializers.SerializerMethodField()
+    dataType = serializers.SerializerMethodField()
+    consentId = serializers.SerializerMethodField()
+    lastAccessed = serializers.SerializerMethodField()
 
     class Meta:
         model = AccessRequest
-        fields = ['organization_name', 'data_type', 'requested_at', 'purpose', 'status']
+        fields = [
+            'id',
+            'organizationId',
+            'organizationName',
+            'dataType',
+            'lastAccessed',
+            'purpose',
+            'status',
+            'consentId',
+        ]
 
-    def get_organization_name(self, obj):
+    def get_organizationName(self, obj):
         return obj.organization.name
 
-    def get_data_type(self, obj):
+    def get_organizationId(self, obj):
+        return obj.organization.id
+
+    def get_dataType(self, obj):
         return obj.consent.name
+
+    def get_consentId(self, obj):
+        return obj.consent.id
+
+    def get_lastAccessed(self, obj):
+        # You can map this to requested_at or actual last access
+        return obj.requested_at
+
 
 class CitizenListSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
