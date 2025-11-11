@@ -51,7 +51,7 @@ class CitizenListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'full_name', 'access_requests']
+        fields = [ 'full_name', 'access_requests']
 
     def get_full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
