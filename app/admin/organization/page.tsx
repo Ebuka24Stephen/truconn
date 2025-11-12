@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button"
 import { TrendingUp, X, CheckCircle2, AlertCircle, FileCheck } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { OrganizationAPI } from "@/lib/organization/api"
+import { TrustAPI, type OrganizationTrustData } from "@/lib/trust/api"
+import { TrustScoreCard } from "@/components/trust-score-card"
+import { DataIntegrityBadge } from "@/components/data-integrity-badge"
 import { useAuth } from "@/lib/auth/context"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -21,6 +24,8 @@ export default function OrganizationDashboard() {
   const [activeConsents, setActiveConsents] = useState(0)
   const [revokedAccesses, setRevokedAccesses] = useState(0)
   const [complianceScore, setComplianceScore] = useState(0)
+  const [trustData, setTrustData] = useState<OrganizationTrustData | null>(null)
+  const [isLoadingTrust, setIsLoadingTrust] = useState(true)
 
   useEffect(() => {
     if (!authLoading && (!isAuthenticated || user?.role !== "organization")) {
@@ -62,6 +67,16 @@ export default function OrganizationDashboard() {
         const total = active + revoked + pending
         const score = total > 0 ? Math.round((active / total) * 100) : 100
         setComplianceScore(score)
+        
+        // Load trust score
+        try {
+          const trust = await TrustAPI.getMyTrustScore()
+          setTrustData(trust)
+        } catch (err) {
+          console.error("Error loading trust score:", err)
+        } finally {
+          setIsLoadingTrust(false)
+        }
       } catch {
         // keep defaults on error
       } finally {
@@ -98,6 +113,21 @@ export default function OrganizationDashboard() {
         {/* Content */}
         <div className="p-6">
           <div className="max-w-7xl mx-auto space-y-6">
+            {/* Trust Score Card */}
+            {trustData && (
+              <TrustScoreCard
+                trustScore={{
+                  overall_score: trustData.trust_score,
+                  trust_level: trustData.trust_level as any,
+                  components: trustData.components,
+                  certificate_issued: trustData.certificate_issued,
+                  certificate_issued_at: trustData.certificate_issued_at,
+                  last_calculated: trustData.last_calculated,
+                }}
+                organizationName={trustData.organization.name}
+              />
+            )}
+
             {/* KPI Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <AnalyticsCard
@@ -128,6 +158,34 @@ export default function OrganizationDashboard() {
                 trend={isLoading ? undefined : { value: 2.5, isPositive: true }}
               />
             </div>
+
+            {/* Data Integrity Badge */}
+            {trustData?.data_integrity && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Data Integrity Status</CardTitle>
+                  <CardDescription>Cryptographic verification of data integrity</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <DataIntegrityBadge
+                    integrityScore={trustData.data_integrity.integrity_score}
+                    verifiedCount={trustData.data_integrity.verified_count}
+                    totalCount={trustData.data_integrity.total_requests}
+                    showDetails={true}
+                  />
+                  {trustData.data_integrity.issues.length > 0 && (
+                    <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded">
+                      <p className="text-sm font-medium text-red-900 mb-2">Integrity Issues Detected:</p>
+                      <ul className="text-sm text-red-800 space-y-1">
+                        {trustData.data_integrity.issues.map((issue, idx) => (
+                          <li key={idx}>• Request #{issue.request_id}: {issue.issue}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
 
             {/* Data Access Chart Placeholder & Recent Requests */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
