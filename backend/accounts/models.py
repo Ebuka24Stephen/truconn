@@ -65,6 +65,7 @@ class Profile(models.Model):
     phone_no = models.CharField(max_length=20, blank=True)
     about = models.TextField(blank=True)
     profile_pic = models.ImageField(upload_to='profile_photo/', blank=True, null=True)
-    
+    location = models.CharField(max_length=100, blank=True)    # new field
+
     def __str__(self):
         return f"{self.user.first_name}'s Profile"

@@ -95,9 +95,12 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class OrganizationProfileSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(source='user.name', read_only=True)
-    address = serializers.CharField(source='user.address', read_only=True)
+    company = serializers.CharField(source='company', read_only=True)
+    location = serializers.CharField(source='location', read_only=True)    
+    phone = serializers.CharField(source='phone_no', read_only=True)
+    website = serializers.CharField(source='url', read_only=True)
+    bio = serializers.CharField(source='about', read_only=True)
 
     class Meta:
         model = Profile
-        fields = ['name', 'user', 'address', 'url', 'about', 'profile_pic']
+        fields = ['company', 'location', 'phone', 'website', 'bio', 'profile_pic']
