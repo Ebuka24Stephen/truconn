@@ -179,7 +179,7 @@ export default function TrustRegistryPage() {
                       </Badge>
                     </div>
                   </div>
-                ))}
+                ))};
               </div>
             )}
           </CardContent>
