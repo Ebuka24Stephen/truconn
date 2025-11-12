@@ -20,21 +20,24 @@ export function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6">
           <Link href="/" className="text-sm font-medium transition-colors hover:text-primary" style={{ color: '#4A4A4A' }}>
             Home
           </Link>
-          <Link href="/dashboard" className="text-sm font-medium transition-colors hover:text-primary" style={{ color: '#4A4A4A' }}>
-            Dashboard
-          </Link>
-          <Link href="/transparency" className="text-sm font-medium transition-colors hover:text-primary" style={{ color: '#4A4A4A' }}>
-            Verify
-          </Link>
-          <Link href="#features" className="text-sm font-medium transition-colors hover:text-primary" style={{ color: '#4A4A4A' }}>
+          <Link href="/learn" className="text-sm font-medium transition-colors hover:text-primary" style={{ color: '#4A4A4A' }}>
             Learn
           </Link>
-          <Link href="#contact" className="text-sm font-medium transition-colors hover:text-primary" style={{ color: '#4A4A4A' }}>
-            Support
+          <Link href="/developers" className="text-sm font-medium transition-colors hover:text-primary" style={{ color: '#4A4A4A' }}>
+            Developers
+          </Link>
+          <Link href="/trust-registry" className="text-sm font-medium transition-colors hover:text-primary" style={{ color: '#4A4A4A' }}>
+            Trust Registry
+          </Link>
+          <Link href="/transparency-reports" className="text-sm font-medium transition-colors hover:text-primary" style={{ color: '#4A4A4A' }}>
+            Reports
+          </Link>
+          <Link href="/help" className="text-sm font-medium transition-colors hover:text-primary" style={{ color: '#4A4A4A' }}>
+            Help
           </Link>
         </div>
 

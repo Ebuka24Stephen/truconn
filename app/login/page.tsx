@@ -62,6 +62,30 @@ function LoginForm() {
         
         // Check for redirect parameter
         const redirectTo = searchParams.get("redirect")
+        
+        // For organizations, check if onboarding is needed
+        if (normalizedRole === "organization" && !redirectTo) {
+          // Check if organization has completed onboarding
+          // This is a simple check - you can enhance it with an API call
+          const onboardingCompleted = localStorage.getItem("onboarding_completed")
+          
+          if (!onboardingCompleted) {
+            // Show onboarding option modal or redirect
+            const shouldOnboard = window.confirm(
+              "Welcome! Would you like to complete your organization setup now? " +
+              "You can skip this and do it later from your dashboard."
+            )
+            
+            if (shouldOnboard) {
+              window.location.href = "/admin/organization/onboarding"
+              return
+            } else {
+              // Mark as skipped (user can access it later from sidebar)
+              localStorage.setItem("onboarding_skipped", "true")
+            }
+          }
+        }
+        
         if (redirectTo) {
           // Use window.location for hard redirect to clear any cached state
           window.location.href = redirectTo

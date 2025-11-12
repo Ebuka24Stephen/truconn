@@ -18,6 +18,7 @@ import { OrganizationAPI, type AccessRequest } from "@/lib/organization/api"
 import { Input } from "@/components/ui/input"
 import { useAuth } from "@/lib/auth/context"
 import { useRouter } from "next/navigation"
+import { BackButton } from "@/components/back-button"
 
 interface Citizen {
   id: number
@@ -108,6 +109,7 @@ export default function ConsentRequestsPage() {
         {/* Header */}
         <div className="sticky top-0 z-40 bg-white border-b border-neutral-200 p-6 shadow-sm">
           <div className="max-w-7xl mx-auto">
+            <BackButton href="/admin/organization" className="mb-4" />
             <h1 className="text-3xl font-bold text-primary">Consent Requests</h1>
             <p className="text-neutral-600 mt-1">Manage citizen consent requests for data access</p>
           </div>

@@ -1,12 +1,29 @@
 "use client"
 
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { OrganizationSidebar } from "@/components/organization-sidebar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Download, FileText, Calendar } from "lucide-react"
+import { useAuth } from "@/lib/auth/context"
+import { BackButton } from "@/components/back-button"
 
 export default function ReportsPage() {
+  const router = useRouter()
+  const { isAuthenticated, isLoading: authLoading, user } = useAuth()
+
+  useEffect(() => {
+    if (!authLoading && (!isAuthenticated || user?.role !== "organization")) {
+      router.push("/login?redirect=/admin/organization/reports")
+      return
+    }
+  }, [isAuthenticated, authLoading, user, router])
+
+  if (authLoading || !isAuthenticated || user?.role !== "organization") {
+    return null
+  }
   const reports = [
     { id: "1", name: "Daily Access Report", type: "Daily", date: "2025-01-15", size: "2.4 MB" },
     { id: "2", name: "Monthly Compliance Report", type: "Monthly", date: "2025-01-01", size: "5.1 MB" },
@@ -21,6 +38,7 @@ export default function ReportsPage() {
       <main className="flex-1 overflow-auto">
         <div className="sticky top-0 z-40 bg-white border-b border-neutral-200 p-6 shadow-sm">
           <div className="max-w-7xl mx-auto">
+            <BackButton href="/admin/organization" className="mb-4" />
             <h1 className="text-3xl font-bold text-primary">Reports & Analytics</h1>
             <p className="text-neutral-600 mt-1">Download compliance and analytics reports</p>
           </div>

@@ -1,9 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { Bell, ShieldAlert, AlertTriangle, CheckCircle, Clock, Building2 } from "lucide-react"
-import { Sidebar } from "@/components/sidebar"
+import { CitizenSidebar } from "@/components/citizen-sidebar"
+import { OrganizationSidebar } from "@/components/organization-sidebar"
+import { useAuth } from "@/lib/auth/context"
 
 interface Notification {
   id: string
@@ -64,7 +67,25 @@ const mockNotifications: Notification[] = [
 ]
 
 export default function NotificationsPage() {
+  const router = useRouter()
+  const { isAuthenticated, isLoading: authLoading, user } = useAuth()
   const [notifications, setNotifications] = useState(mockNotifications)
+
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.push("/login?redirect=/notifications")
+      return
+    }
+  }, [isAuthenticated, authLoading, router])
+
+  if (authLoading || !isAuthenticated) {
+    return null
+  }
+
+  // Determine which sidebar to use based on user role
+  const SidebarComponent = user?.role === "organization" || user?.role === "ORGANIZATION" 
+    ? OrganizationSidebar 
+    : CitizenSidebar
 
   const getIcon = (type: Notification["type"]) => {
     switch (type) {
@@ -93,7 +114,7 @@ export default function NotificationsPage() {
 
   return (
     <div className="flex h-screen bg-background">
-      <Sidebar />
+      <SidebarComponent />
       <main className="flex-1 overflow-auto">
         <div className="max-w-2xl mx-auto p-4 md:p-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>

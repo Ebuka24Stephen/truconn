@@ -2,8 +2,18 @@
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@radix-ui/react-accordion'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { BackButton } from "@/components/back-button"
+import { useAuth } from "@/lib/auth/context"
+import { CitizenSidebar } from "@/components/citizen-sidebar"
+import { OrganizationSidebar } from "@/components/organization-sidebar"
 
 export default function HelpPage() {
+  const { user, isAuthenticated } = useAuth()
+  const SidebarComponent = user?.role === "organization" || user?.role === "ORGANIZATION" 
+    ? OrganizationSidebar 
+    : isAuthenticated 
+      ? CitizenSidebar 
+      : null
   const faqs = [
     { q: 'What is TruCon?', a: 'TruCon is a citizen-first data trust platform enabling transparent consent and secure data access for Nigerians.' },
     { q: 'How does consent work?', a: 'You can grant, modify, or revoke consent for specific data categories. Every action is logged for transparency.' },
@@ -12,12 +22,15 @@ export default function HelpPage() {
   ]
 
   return (
-    <div className="min-h-screen" style={{ background: '#F7F9FB' }}>
-      <div className="max-w-5xl mx-auto px-4 py-10 space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold" style={{ color: '#004C99' }}>Help & Trust Education</h1>
-          <p className="mt-2" style={{ color: '#4A4A4A' }}>Learn how TruCon protects your data and empowers your choices.</p>
-        </div>
+    <div className={`min-h-screen ${SidebarComponent ? 'flex' : ''}`} style={{ background: '#F7F9FB' }}>
+      {SidebarComponent && <SidebarComponent />}
+      <div className={`${SidebarComponent ? 'flex-1 overflow-auto' : ''} px-4 py-10`}>
+        <div className="max-w-5xl mx-auto space-y-8">
+          <div>
+            {isAuthenticated && <BackButton href={user?.role === "organization" ? "/admin/organization" : "/dashboard"} className="mb-4" />}
+            <h1 className="text-3xl font-bold" style={{ color: '#004C99' }}>Help & Trust Education</h1>
+            <p className="mt-2" style={{ color: '#4A4A4A' }}>Learn how TruCon protects your data and empowers your choices.</p>
+          </div>
 
         <Card>
           <CardHeader>

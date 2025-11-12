@@ -9,6 +9,7 @@ import { ConsentsAPI, type Consent } from "@/lib/consents/api"
 import { AlertCircle } from "lucide-react"
 import { useAuth } from "@/lib/auth/context"
 import { useRouter } from "next/navigation"
+import { BackButton } from "@/components/back-button"
 
 interface ConsentWithStatus extends Consent {
   allowed: boolean
@@ -102,6 +103,7 @@ export default function ConsentManagementPage() {
         {/* Header */}
         <div className="sticky top-0 z-40 bg-white border-b border-neutral-200 p-6 shadow-sm">
           <div className="max-w-7xl mx-auto">
+            <BackButton href="/dashboard" className="mb-4" />
             <h1 className="text-3xl font-bold text-primary">Consent Management</h1>
             <p className="text-neutral-600 mt-1">Control what data categories can be accessed</p>
           </div>

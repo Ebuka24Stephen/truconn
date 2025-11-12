@@ -18,6 +18,7 @@ import { Search, Filter, Download, AlertCircle } from "lucide-react"
 import { ConsentsAPI } from "@/lib/consents/api"
 import { useAuth } from "@/lib/auth/context"
 import { useRouter } from "next/navigation"
+import { BackButton } from "@/components/back-button"
 
 interface TransparencyItem {
   id: number
@@ -86,6 +87,7 @@ export default function TransparencyLogPage() {
         {/* Header */}
         <div className="sticky top-0 z-40 bg-white border-b border-neutral-200 p-6 shadow-sm">
           <div className="max-w-7xl mx-auto">
+            <BackButton href="/dashboard" className="mb-4" />
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-primary">Transparency Log</h1>

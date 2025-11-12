@@ -18,6 +18,7 @@ import {
 import { Search, Download, Filter } from "lucide-react"
 import { OrganizationAPI } from "@/lib/organization/api"
 import { useAuth } from "@/lib/auth/context"
+import { BackButton } from "@/components/back-button"
 
 interface AccessLog {
   id: number
@@ -92,6 +93,7 @@ export default function DataAccessLogsPage() {
       <main className="flex-1 overflow-auto">
         <div className="sticky top-0 z-40 bg-white border-b border-neutral-200 p-6 shadow-sm">
           <div className="max-w-7xl mx-auto">
+            <BackButton href="/admin/organization" className="mb-4" />
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-primary">Data Access Logs</h1>

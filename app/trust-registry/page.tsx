@@ -5,8 +5,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Loader2, Shield, Award, TrendingUp } from "lucide-react"
 import { TrustAPI, type TrustRegistryEntry } from "@/lib/trust/api"
+import { BackButton } from "@/components/back-button"
+import { useAuth } from "@/lib/auth/context"
+import { CitizenSidebar } from "@/components/citizen-sidebar"
+import { OrganizationSidebar } from "@/components/organization-sidebar"
 
 export default function TrustRegistryPage() {
+  const { user, isAuthenticated } = useAuth()
+  const SidebarComponent = user?.role === "organization" || user?.role === "ORGANIZATION" 
+    ? OrganizationSidebar 
+    : isAuthenticated 
+      ? CitizenSidebar 
+      : null
   const [isLoading, setIsLoading] = useState(true)
   const [organizations, setOrganizations] = useState<TrustRegistryEntry[]>([])
   const [error, setError] = useState("")
@@ -57,16 +67,19 @@ export default function TrustRegistryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
-          <div className="flex items-center gap-3 mb-2">
-            <Shield className="w-8 h-8 text-primary" />
-            <h1 className="text-3xl font-bold text-primary">Trust Registry</h1>
-          </div>
-          <p className="text-neutral-600">
-            Verified organizations ranked by trust score based on NDPR compliance, data integrity, and transparency
+    <div className={`min-h-screen bg-neutral-50 ${SidebarComponent ? 'flex' : ''}`}>
+      {SidebarComponent && <SidebarComponent />}
+      <div className={`${SidebarComponent ? 'flex-1 overflow-auto' : ''} p-6`}>
+        <div className="max-w-7xl mx-auto space-y-6">
+          {/* Header */}
+          <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+            {isAuthenticated && <BackButton href={user?.role === "organization" ? "/admin/organization" : "/dashboard"} className="mb-4" />}
+            <div className="flex items-center gap-3 mb-2">
+              <Shield className="w-8 h-8 text-primary" />
+              <h1 className="text-3xl font-bold text-primary">Trust Registry</h1>
+            </div>
+            <p className="text-neutral-600">
+              Verified organizations ranked by trust score based on NDPR compliance, data integrity, and transparency
           </p>
         </div>
 

@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { AlertCircle, CheckCircle2, AlertTriangle, Loader2 } from "lucide-react"
 import { ComplianceAPI, type ComplianceAudit } from "@/lib/compliance/api"
 import { useAuth } from "@/lib/auth/context"
+import { BackButton } from "@/components/back-button"
 
 export default function ComplianceScannerPage() {
   const router = useRouter()
@@ -120,6 +121,7 @@ export default function ComplianceScannerPage() {
       <main className="flex-1 overflow-auto">
         <div className="sticky top-0 z-40 bg-white border-b border-neutral-200 p-6 shadow-sm">
           <div className="max-w-7xl mx-auto">
+            <BackButton href="/admin/organization" className="mb-4" />
             <h1 className="text-3xl font-bold text-primary">Compliance Scanner</h1>
             <p className="text-neutral-600 mt-1">AI-driven compliance check and recommendations</p>
           </div>
