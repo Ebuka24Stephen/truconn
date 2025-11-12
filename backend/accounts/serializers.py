@@ -100,4 +100,4 @@ class OrganizationProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ['name', 'user', 'address', 'url', 'about', 'profile']
+        fields = ['name', 'user', 'address', 'url', 'about', 'profile_pic']
