@@ -16,16 +16,16 @@ interface AnalyticsCardProps {
 
 export function AnalyticsCard({ title, value, description, icon: Icon, trend }: AnalyticsCardProps) {
   return (
-    <Card className="hover:shadow-lg transition-shadow">
+    <Card className="bg-gradient-to-br from-gray-900/70 to-gray-900/40 border-purple-500/30 backdrop-blur-xl hover:border-purple-500/50 transition-all hover:shadow-lg hover:shadow-purple-500/20">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-neutral-600">{title}</CardTitle>
-        {Icon && <Icon className="h-4 w-4 text-neutral-500" />}
+        <CardTitle className="text-sm font-medium text-gray-400">{title}</CardTitle>
+        {Icon && <Icon className="h-4 w-4 text-purple-400" />}
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold text-primary">{value}</div>
-        {description && <p className="text-xs text-neutral-500 mt-1">{description}</p>}
+        <div className="text-2xl font-bold text-purple-300">{value}</div>
+        {description && <p className="text-xs text-gray-400 mt-1">{description}</p>}
         {trend && (
-          <p className={`text-xs mt-2 ${trend.isPositive ? "text-emerald-600" : "text-red-600"}`}>
+          <p className={`text-xs mt-2 ${trend.isPositive ? "text-emerald-400" : "text-red-400"}`}>
             {trend.isPositive ? "+" : "-"}
             {Math.abs(trend.value)}% from last month
           </p>

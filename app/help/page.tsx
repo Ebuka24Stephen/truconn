@@ -63,6 +63,7 @@ export default function HelpPage() {
             </Accordion>
           </CardContent>
         </Card>
+        </div>
       </div>
     </div>
   )

@@ -335,6 +335,7 @@ export default function TransparencyReportsPage() {
             </p>
           </CardContent>
         </Card>
+        </div>
       </div>
     </div>
   )

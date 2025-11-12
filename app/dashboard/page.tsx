@@ -82,27 +82,27 @@ export default function CitizenDashboard() {
   }
 
   return (
-    <div className="flex h-screen bg-neutral-50">
+    <div className="flex h-screen bg-black">
       <CitizenSidebar />
 
       <main className="flex-1 overflow-auto">
         {/* Header */}
-        <div className="sticky top-0 z-40 bg-white border-b border-neutral-200 p-6 shadow-sm">
+        <div className="sticky top-0 z-40 glass-effect border-b border-purple-900/30 p-6">
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-primary">Overview</h1>
-                <p className="text-neutral-600 mt-1">Manage your personal data and consent</p>
+                <h1 className="text-3xl font-bold text-white">Overview</h1>
+                <p className="text-gray-400 mt-1">Manage your personal data and consent</p>
               </div>
               <div className="flex items-center gap-4">
-                <Button variant="outline" size="sm" asChild>
+                <Button variant="outline" size="sm" asChild className="border-purple-500/50 text-purple-300 hover:bg-purple-500/20">
                   <Link href="/notifications">
                     <Bell className="w-4 h-4 mr-2" />
                     Notifications
                   </Link>
                 </Button>
-                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                  <span className="text-primary font-semibold">JD</span>
+                <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-violet-700 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/50">
+                  <span className="text-white font-semibold">JD</span>
                 </div>
               </div>
             </div>
@@ -143,55 +143,55 @@ export default function CitizenDashboard() {
 
             {/* Trust Meter & Chart */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
+              <Card className="bg-gradient-to-br from-gray-900/70 to-gray-900/40 border-purple-500/30 backdrop-blur-xl">
                 <CardHeader>
-                  <CardTitle>Data Exposure Level</CardTitle>
-                  <CardDescription>Your current privacy and data exposure risk</CardDescription>
+                  <CardTitle className="text-white">Data Exposure Level</CardTitle>
+                  <CardDescription className="text-gray-400">Your current privacy and data exposure risk</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <TrustMeter value={trustScore} />
                   <div className="mt-6 space-y-2">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-neutral-600">Data Categories Shared</span>
-                      <Badge variant="outline">{isLoading ? "..." : `${activeConsents}`}</Badge>
+                      <span className="text-gray-300">Data Categories Shared</span>
+                      <Badge variant="outline" className="border-purple-500/50 text-purple-300">{isLoading ? "..." : `${activeConsents}`}</Badge>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-neutral-600">Active Organizations</span>
-                      <Badge variant="outline">{isLoading ? "..." : organizationsCount}</Badge>
+                      <span className="text-gray-300">Active Organizations</span>
+                      <Badge variant="outline" className="border-purple-500/50 text-purple-300">{isLoading ? "..." : organizationsCount}</Badge>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="bg-gradient-to-br from-gray-900/70 to-gray-900/40 border-purple-500/30 backdrop-blur-xl">
                 <CardHeader>
-                  <CardTitle>Recent Activity</CardTitle>
-                  <CardDescription>Latest data access events</CardDescription>
+                  <CardTitle className="text-white">Recent Activity</CardTitle>
+                  <CardDescription className="text-gray-400">Latest data access events</CardDescription>
                 </CardHeader>
                 <CardContent>
                   {isLoading ? (
-                    <div className="text-center py-8 text-neutral-500">Loading recent activity...</div>
+                    <div className="text-center py-8 text-gray-400">Loading recent activity...</div>
                   ) : recentActivity.length === 0 ? (
-                    <div className="text-center py-8 text-neutral-500">No recent activity</div>
+                    <div className="text-center py-8 text-gray-400">No recent activity</div>
                   ) : (
                     <div className="space-y-4">
                       {recentActivity.map((log) => (
-                        <div key={log.id} className="flex items-start justify-between pb-4 border-b last:border-0">
+                        <div key={log.id} className="flex items-start justify-between pb-4 border-b border-purple-900/30 last:border-0">
                           <div className="flex-1">
-                            <p className="font-semibold text-sm text-primary">{log.organizationName}</p>
-                            <p className="text-xs text-neutral-500 mt-1">{log.purpose}</p>
-                            <p className="text-xs text-neutral-400 mt-1">
+                            <p className="font-semibold text-sm text-purple-400">{log.organizationName}</p>
+                            <p className="text-xs text-gray-400 mt-1">{log.purpose}</p>
+                            <p className="text-xs text-gray-500 mt-1">
                               {log.dateTime ? new Date(log.dateTime).toLocaleString() : "N/A"}
                             </p>
                           </div>
-                          <Badge variant="outline" className="text-xs">
+                          <Badge variant="outline" className="text-xs border-cyan-500/50 text-cyan-400">
                             {log.accessType}
                           </Badge>
                         </div>
                       ))}
                     </div>
                   )}
-                  <Button variant="outline" className="w-full mt-4" asChild>
+                  <Button variant="outline" className="w-full mt-4 border-purple-500/50 text-purple-300 hover:bg-purple-500/20" asChild>
                     <Link href="/dashboard/transparency">View All Logs</Link>
                   </Button>
                 </CardContent>
@@ -199,32 +199,32 @@ export default function CitizenDashboard() {
             </div>
 
             {/* Quick Actions */}
-            <Card>
+            <Card className="bg-gradient-to-br from-gray-900/70 to-gray-900/40 border-purple-500/30 backdrop-blur-xl">
               <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-                <CardDescription>Common tasks and settings</CardDescription>
+                <CardTitle className="text-white">Quick Actions</CardTitle>
+                <CardDescription className="text-gray-400">Common tasks and settings</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Button variant="outline" className="h-auto flex-col py-6 gap-2" asChild>
+                  <Button variant="outline" className="h-auto flex-col py-6 gap-2 border-purple-500/50 text-purple-300 hover:bg-purple-500/20 hover:border-purple-400" asChild>
                     <Link href="/dashboard/data-access">
                       <Database className="w-6 h-6" />
                       <span className="font-semibold">Manage Data Access</span>
-                      <span className="text-xs text-neutral-500">View and revoke access</span>
+                      <span className="text-xs text-gray-400">View and revoke access</span>
                     </Link>
                   </Button>
-                  <Button variant="outline" className="h-auto flex-col py-6 gap-2" asChild>
+                  <Button variant="outline" className="h-auto flex-col py-6 gap-2 border-cyan-500/50 text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-400" asChild>
                     <Link href="/dashboard/consent">
                       <Shield className="w-6 h-6" />
                       <span className="font-semibold">Manage Consents</span>
-                      <span className="text-xs text-neutral-500">Grant or revoke consent</span>
+                      <span className="text-xs text-gray-400">Grant or revoke consent</span>
                     </Link>
                   </Button>
-                  <Button variant="outline" className="h-auto flex-col py-6 gap-2" asChild>
+                  <Button variant="outline" className="h-auto flex-col py-6 gap-2 border-violet-500/50 text-violet-300 hover:bg-violet-500/20 hover:border-violet-400" asChild>
                     <Link href="/settings">
                       <AlertCircle className="w-6 h-6" />
                       <span className="font-semibold">Account Settings</span>
-                      <span className="text-xs text-neutral-500">Update preferences</span>
+                      <span className="text-xs text-gray-400">Update preferences</span>
                     </Link>
                   </Button>
                 </div>

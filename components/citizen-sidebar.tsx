@@ -41,14 +41,14 @@ export function CitizenSidebar() {
   ]
 
   return (
-    <aside className="w-64 bg-white border-r border-neutral-200 h-screen sticky top-0 flex flex-col">
+    <aside className="w-64 bg-gradient-to-b from-gray-950 to-black border-r border-purple-900/30 h-screen sticky top-0 flex flex-col">
       {/* Logo */}
-      <div className="p-6 border-b border-neutral-200">
-        <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+      <div className="p-6 border-b border-purple-900/30">
+        <Link href="/dashboard" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-violet-700 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/50">
             <span className="text-lg font-bold text-white">✓</span>
           </div>
-          <span className="text-xl font-bold text-primary">TruCon NDTS</span>
+          <span className="text-xl font-bold text-white">TruCon NDTS</span>
         </Link>
       </div>
 
@@ -66,10 +66,10 @@ export function CitizenSidebar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
+                  "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200",
                   isActive
-                    ? "bg-primary/10 text-primary font-semibold"
-                    : "text-neutral-600 hover:bg-neutral-100",
+                    ? "bg-gradient-to-r from-purple-600/30 to-violet-600/30 text-purple-300 font-semibold border border-purple-500/50 shadow-lg shadow-purple-500/20"
+                    : "text-gray-400 hover:bg-purple-900/20 hover:text-purple-300",
                 )}
               >
                 <Icon className="w-5 h-5" />
@@ -80,8 +80,8 @@ export function CitizenSidebar() {
         </div>
 
         {/* Public Pages Section */}
-        <div className="pt-4 mt-4 border-t border-neutral-200">
-          <p className="px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">
+        <div className="pt-4 mt-4 border-t border-purple-900/30">
+          <p className="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
             Resources
           </p>
           <div className="space-y-1">
@@ -93,10 +93,10 @@ export function CitizenSidebar() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
+                    "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200",
                     isActive
-                      ? "bg-primary/10 text-primary font-semibold"
-                      : "text-neutral-600 hover:bg-neutral-100",
+                      ? "bg-gradient-to-r from-cyan-600/30 to-blue-600/30 text-cyan-300 font-semibold border border-cyan-500/50 shadow-lg shadow-cyan-500/20"
+                      : "text-gray-400 hover:bg-cyan-900/20 hover:text-cyan-300",
                   )}
                 >
                   <Icon className="w-5 h-5" />
@@ -109,10 +109,10 @@ export function CitizenSidebar() {
       </nav>
 
       {/* Logout */}
-      <div className="p-4 border-t border-neutral-200">
+      <div className="p-4 border-t border-purple-900/30">
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-neutral-600 hover:bg-neutral-100 transition-colors"
+          className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-gray-400 hover:bg-red-900/20 hover:text-red-400 transition-all duration-200"
         >
           <LogOut className="w-5 h-5" />
           <span>Logout</span>

@@ -28,8 +28,11 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-20 md:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="how-it-works" className="py-20 md:py-32 bg-gradient-to-b from-black to-gray-950 relative overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl" />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <motion.div
           className="text-center mb-16"
@@ -38,8 +41,8 @@ export function HowItWorks() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">How TruCon Works</h2>
-          <p className="text-lg text-foreground/60 max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">How TruCon Works</h2>
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
             Get started in four simple steps and begin building trust in your community.
           </p>
         </motion.div>
@@ -57,15 +60,15 @@ export function HowItWorks() {
             >
               {/* Arrow connector */}
               {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-12 -right-3 text-accent/30">
+                <div className="hidden md:block absolute top-12 -right-3 text-purple-500/50">
                   <ArrowRight size={24} />
                 </div>
               )}
 
-              <div className="bg-card border border-border rounded-xl p-6 h-full">
-                <div className="text-4xl font-bold text-accent/30 mb-4">{step.number}</div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">{step.title}</h3>
-                <p className="text-foreground/60 text-sm leading-relaxed">{step.description}</p>
+              <div className="bg-gradient-to-br from-gray-900/70 to-gray-900/40 border border-purple-500/30 rounded-xl p-6 h-full backdrop-blur-xl hover:border-purple-500/50 transition-colors">
+                <div className="text-4xl font-bold text-purple-400/50 mb-4">{step.number}</div>
+                <h3 className="text-lg font-semibold text-white mb-2">{step.title}</h3>
+                <p className="text-gray-300 text-sm leading-relaxed">{step.description}</p>
               </div>
             </motion.div>
           ))}
