@@ -4,39 +4,39 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #F7F9FB;
-  --foreground: #222222;
-  --card: #FFFFFF;
-  --card-foreground: #222222;
-  --popover: #FFFFFF;
-  --popover-foreground: #222222;
-  --primary: #004C99;
+  --background: #0A0A0F;
+  --foreground: #E4E4E7;
+  --card: #1A1A24;
+  --card-foreground: #E4E4E7;
+  --popover: #1A1A24;
+  --popover-foreground: #E4E4E7;
+  --primary: #8B5CF6;
   --primary-foreground: #FFFFFF;
-  --secondary: #00B38F;
+  --secondary: #6D28D9;
   --secondary-foreground: #FFFFFF;
-  --muted: #F0F2F5;
-  --muted-foreground: #4A4A4A;
-  --accent: #F9C80E;
-  --accent-foreground: #222222;
-  --destructive: #E74C3C;
+  --muted: #27273A;
+  --muted-foreground: #A1A1AA;
+  --accent: #A78BFA;
+  --accent-foreground: #FFFFFF;
+  --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --border: #E0E4E8;
-  --input: #E0E4E8;
-  --ring: #004C99;
-  --chart-1: #004C99;
-  --chart-2: #00B38F;
-  --chart-3: #F9C80E;
-  --chart-4: #0066CC;
-  --chart-5: #00D4A5;
-  --radius: 0.5rem;
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #222222;
-  --sidebar-primary: #004C99;
+  --border: #27273A;
+  --input: #27273A;
+  --ring: #8B5CF6;
+  --chart-1: #8B5CF6;
+  --chart-2: #06B6D4;
+  --chart-3: #A78BFA;
+  --chart-4: #6D28D9;
+  --chart-5: #C084FC;
+  --radius: 0.75rem;
+  --sidebar: #0F0F16;
+  --sidebar-foreground: #E4E4E7;
+  --sidebar-primary: #8B5CF6;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F0F2F5;
-  --sidebar-accent-foreground: #222222;
-  --sidebar-border: #E0E4E8;
-  --sidebar-ring: #004C99;
+  --sidebar-accent: #1A1A24;
+  --sidebar-accent-foreground: #E4E4E7;
+  --sidebar-border: #27273A;
+  --sidebar-ring: #8B5CF6;
 }
 
 .dark {
@@ -89,20 +89,20 @@
   --line-height-normal: 1.6;
   --line-height-relaxed: 1.8;
 
-  /* TruCon Official Color System - Citizen Data Trust Framework */
-  --color-trust-blue: #004C99; /* Primary - Deep Trust Blue - Governmental authority */
-  --color-trust-blue-light: #0066CC; /* Hover state for trust blue */
-  --color-tech-green: #00B38F; /* Secondary - Innovation, data growth */
-  --color-tech-green-light: #00D4A5; /* Hover state for tech green */
-  --color-gold: #F9C80E; /* Accent - Empowerment, optimism */
-  --color-gold-light: #FBD84D; /* Hover state for gold */
-  --color-bg-primary: #F7F9FB; /* Main background - Clarity, neutrality */
-  --color-text-primary: #222222; /* Primary text - Professional readability */
-  --color-text-secondary: #4A4A4A; /* Secondary text */
-  --color-danger: #E74C3C; /* Transparent risk signaling */
-  --color-danger-light: #EC7063; /* Hover state for danger */
+  /* TruCon Web3 Color System - Modern Dark Theme */
+  --color-trust-blue: #8B5CF6; /* Primary - Vibrant Purple - Modern Trust */
+  --color-trust-blue-light: #A78BFA; /* Hover state for purple */
+  --color-tech-green: #06B6D4; /* Secondary - Cyan - Innovation, data growth */
+  --color-tech-green-light: #22D3EE; /* Hover state for cyan */
+  --color-gold: #C084FC; /* Accent - Light Purple - Empowerment */
+  --color-gold-light: #D8B4FE; /* Hover state for light purple */
+  --color-bg-primary: #0A0A0F; /* Main background - Pure dark */
+  --color-text-primary: #E4E4E7; /* Primary text - High contrast */
+  --color-text-secondary: #A1A1AA; /* Secondary text */
+  --color-danger: #EF4444; /* Risk signaling */
+  --color-danger-light: #F87171; /* Hover state for danger */
   --color-white: #FFFFFF;
-  --color-border: #E0E4E8; /* Subtle borders */
+  --color-border: #27273A; /* Subtle borders */
   
   /* Legacy mappings for compatibility */
   --color-primary: var(--color-trust-blue);
@@ -189,50 +189,62 @@
 
 @layer components {
   .trucon-gradient {
-    background: linear-gradient(135deg, #004C99 0%, #0066CC 100%);
+    background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
   }
 
   .trust-badge {
     @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold;
-    background-color: rgba(0, 179, 143, 0.1);
-    color: #00B38F;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(109, 40, 217, 0.2) 100%);
+    color: #A78BFA;
+    border: 1px solid rgba(139, 92, 246, 0.3);
   }
 
   .verified-badge {
     @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold;
-    background-color: rgba(0, 179, 143, 0.1);
-    color: #00B38F;
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(34, 211, 238, 0.2) 100%);
+    color: #06B6D4;
+    border: 1px solid rgba(6, 182, 212, 0.3);
   }
 
   .empowerment-badge {
     @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold;
-    background-color: rgba(249, 200, 14, 0.15);
-    color: #C89600;
+    background: linear-gradient(135deg, rgba(192, 132, 252, 0.2) 0%, rgba(216, 180, 254, 0.2) 100%);
+    color: #C084FC;
+    border: 1px solid rgba(192, 132, 252, 0.3);
   }
 
   .card-hover {
     @apply transition-all duration-300 ease-out;
+    border: 1px solid rgba(139, 92, 246, 0.2);
   }
   
   .card-hover:hover {
-    @apply shadow-lg;
     transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3), 0 0 16px rgba(139, 92, 246, 0.2);
+    border-color: rgba(139, 92, 246, 0.5);
   }
 
   .glass-effect {
-    @apply bg-white/95 backdrop-blur-md border border-border;
+    @apply backdrop-blur-xl border border-border;
+    background: rgba(26, 26, 36, 0.7);
   }
   
   .trust-button {
     @apply px-6 py-3 rounded-lg font-semibold transition-all duration-300 ease-out;
-    background: #004C99;
+    background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
     color: white;
+    border: 1px solid rgba(139, 92, 246, 0.5);
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
   }
   
   .trust-button:hover {
-    background: #0066CC;
+    background: linear-gradient(135deg, #A78BFA 0%, #8B5CF6 100%);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 76, 153, 0.3);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.5), 0 0 32px rgba(139, 92, 246, 0.3);
+  }
+  
+  .web3-glow {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5), 0 0 40px rgba(139, 92, 246, 0.3);
   }
   
   .trust-ring {
@@ -245,6 +257,17 @@
     }
     50% {
       opacity: 0.5;
+    }
+  }
+  
+  @keyframes glow-pulse {
+    0%, 100% {
+      opacity: 0.4;
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+    }
+    50% {
+      opacity: 1;
+      box-shadow: 0 0 40px rgba(139, 92, 246, 0.8), 0 0 60px rgba(139, 92, 246, 0.5);
     }
   }
 }

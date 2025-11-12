@@ -10,28 +10,33 @@ const features = [
     title: "Consent Management",
     description:
       "Take full control of your personal data. Grant, modify, or revoke consent with clear transparency on what data is shared and with whom.",
-    color: "#004C99",
+    color: "#8B5CF6",
   },
   {
     icon: Eye,
     title: "Transparency Dashboard",
     description:
       "Real-time visibility into how your data is being accessed. View detailed logs of every organization that accesses your information and when.",
-    color: "#00B38F",
+    color: "#06B6D4",
   },
   {
     icon: FileCheck,
     title: "Compliance Engine",
     description:
       "Organizations get automated compliance monitoring under NDPR standards. Receive alerts and recommendations to maintain data protection standards.",
-    color: "#F9C80E",
+    color: "#C084FC",
   },
 ]
 
 export function Features() {
   return (
-    <section id="features" className="py-20 md:py-32 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="features" className="py-20 md:py-32 bg-black relative overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-950/10 to-black" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl" />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <motion.div
           className="text-center mb-16"
@@ -40,10 +45,10 @@ export function Features() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4" style={{ color: '#004C99', fontWeight: 700 }}>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-white">
             Empowered Data Control
           </h2>
-          <p className="text-lg max-w-2xl mx-auto" style={{ color: '#4A4A4A', lineHeight: '1.6' }}>
+          <p className="text-lg max-w-2xl mx-auto text-gray-300">
             Your right to data privacy and control. See, manage, and protect your personal information with complete
             transparency.
           </p>
@@ -62,32 +67,27 @@ export function Features() {
                 viewport={{ once: true }}
               >
                 <Card 
-                  className="h-full card-hover group"
-                  style={{ 
-                    border: '2px solid #E0E4E8',
-                    background: '#FFFFFF'
-                  }}
+                  className="h-full card-hover group bg-gradient-to-br from-gray-900/50 to-gray-900/30 backdrop-blur-xl border-purple-500/20"
                 >
                   <CardHeader className="space-y-4">
                     <div className="relative">
                       <div 
                         className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl transition-transform duration-300 group-hover:scale-110"
                         style={{ 
-                          background: `${feature.color}15`
+                          background: `${feature.color}20`,
+                          boxShadow: `0 0 20px ${feature.color}30`
                         }}
                       >
                         <Icon className="w-8 h-8" style={{ color: feature.color }} />
                       </div>
                     </div>
                     <CardTitle 
-                      className="text-xl font-bold mb-2"
-                      style={{ color: '#222222', fontWeight: 600 }}
+                      className="text-xl font-bold mb-2 text-white"
                     >
                       {feature.title}
                     </CardTitle>
                     <CardDescription 
-                      className="text-base leading-relaxed"
-                      style={{ color: '#4A4A4A', lineHeight: '1.6' }}
+                      className="text-base leading-relaxed text-gray-300"
                     >
                       {feature.description}
                     </CardDescription>

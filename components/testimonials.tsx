@@ -26,8 +26,14 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section id="testimonials" className="py-20 md:py-32 bg-card/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="testimonials" className="py-20 md:py-32 bg-gradient-to-b from-gray-950 to-black relative overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl" />
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <motion.div
           className="text-center mb-16"
@@ -36,8 +42,8 @@ export function Testimonials() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">Trusted by Communities</h2>
-          <p className="text-lg text-foreground/60 max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">Trusted by Communities</h2>
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
             See what users are saying about their TruCon experience.
           </p>
         </motion.div>
@@ -47,7 +53,7 @@ export function Testimonials() {
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={index}
-              className="bg-background border border-border rounded-xl p-8"
+              className="bg-gradient-to-br from-gray-900/70 to-gray-900/40 border border-purple-500/30 rounded-xl p-8 backdrop-blur-xl hover:border-purple-500/50 transition-all"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -56,17 +62,17 @@ export function Testimonials() {
               {/* Rating */}
               <div className="flex gap-1 mb-4">
                 {Array.from({ length: testimonial.rating }).map((_, i) => (
-                  <Star key={i} size={16} className="fill-accent text-accent" />
+                  <Star key={i} size={16} className="fill-purple-400 text-purple-400" />
                 ))}
               </div>
 
               {/* Content */}
-              <p className="text-foreground/80 mb-6 leading-relaxed">"{testimonial.content}"</p>
+              <p className="text-gray-300 mb-6 leading-relaxed">"{testimonial.content}"</p>
 
               {/* Author */}
               <div>
-                <div className="font-semibold text-foreground">{testimonial.name}</div>
-                <div className="text-sm text-foreground/60">{testimonial.role}</div>
+                <div className="font-semibold text-white">{testimonial.name}</div>
+                <div className="text-sm text-gray-400">{testimonial.role}</div>
               </div>
             </motion.div>
           ))}
