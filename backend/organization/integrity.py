@@ -6,7 +6,6 @@ import hashlib
 import json
 from datetime import datetime
 from django.utils import timezone
-from django.db import models
 from .models import AccessRequest, Org, IntegrityRecord
 
 
@@ -106,26 +105,4 @@ class DataIntegrityChecker:
             'issues': integrity_issues,
             'verified_at': timezone.now().isoformat(),
         }
-
-
-class IntegrityRecord(models.Model):
-    """Store integrity records for audit trail"""
-    organization = models.ForeignKey(Org, on_delete=models.CASCADE, related_name='integrity_records')
-    entity_type = models.CharField(max_length=50)  # 'access_request', 'consent', etc.
-    entity_id = models.CharField(max_length=100)
-    data_snapshot = models.JSONField()
-    checksum = models.CharField(max_length=64)  # SHA-256 hex = 64 chars
-    created_at = models.DateTimeField(auto_now_add=True)
-    verified_at = models.DateTimeField(null=True, blank=True)
-    is_valid = models.BooleanField(default=True)
-    
-    class Meta:
-        ordering = ['-created_at']
-        indexes = [
-            models.Index(fields=['organization', '-created_at']),
-            models.Index(fields=['entity_type', 'entity_id']),
-        ]
-    
-    def __str__(self):
-        return f"{self.organization.name} - {self.entity_type} - {self.checksum[:8]}"
 
