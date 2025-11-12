@@ -95,7 +95,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class OrganizationProfileSerializer(serializers.ModelSerializer):
-    company = serializers.CharField(source='company', read_only=True)
+    company = serializers.CharField(read_only=True)
     location = serializers.CharField(source='location', read_only=True)    
     phone = serializers.CharField(source='phone_no', read_only=True)
     website = serializers.CharField(source='url', read_only=True)
