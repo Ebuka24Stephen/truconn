@@ -1,15 +1,18 @@
 from rest_framework import serializers
-from .models import ComplianceAudit, ViolationReport
+from .models import ComplianceAudit, ViolationReport, Org
 
 
 class ComplianceAuditSerializer(serializers.ModelSerializer):
     organization_name = serializers.CharField(source='organization.name', read_only=True)
-    
+    organization = serializers.PrimaryKeyRelatedField(
+        queryset=Org.objects.all()
+    )  # allows passing org IDs safely
+
     class Meta:
         model = ComplianceAudit
         fields = [
-            'id', 'organization', 'organization_name', 'rule_name', 
-            'rule_description', 'severity', 'status', 'detected_at', 
+            'id', 'organization', 'organization_name', 'rule_name',
+            'rule_description', 'severity', 'status', 'detected_at',
             'resolved_at', 'details', 'recommendation'
         ]
         read_only_fields = ['detected_at']
@@ -18,7 +21,13 @@ class ComplianceAuditSerializer(serializers.ModelSerializer):
 class ViolationReportSerializer(serializers.ModelSerializer):
     organization_name = serializers.CharField(source='organization.name', read_only=True)
     violation_type_display = serializers.CharField(source='get_violation_type_display', read_only=True)
-    
+    organization = serializers.PrimaryKeyRelatedField(
+        queryset=Org.objects.all()
+    )
+    related_audit = serializers.PrimaryKeyRelatedField(
+        queryset=ComplianceAudit.objects.all(), allow_null=True, required=False
+    )
+
     class Meta:
         model = ViolationReport
         fields = [
@@ -37,6 +46,5 @@ class ComplianceScanResultSerializer(serializers.Serializer):
     critical_count = serializers.IntegerField()
     high_count = serializers.IntegerField()
     medium_count = serializers.IntegerField()
-    violations = serializers.ListField()
+    violations = ViolationReportSerializer(many=True, read_only=True)  # pass list of IDs or objects
     audit_records = ComplianceAuditSerializer(many=True, read_only=True)
-
