@@ -184,6 +184,7 @@ export default function TrustRegistryPage() {
             )}
           </CardContent>
         </Card>
+        </div>
       </div>
     </div>
   )
