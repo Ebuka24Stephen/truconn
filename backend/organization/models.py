@@ -24,7 +24,7 @@ class Org(models.Model):
     address = models.CharField(max_length=700)
     
     # Trust Score Fields
-    trust_score = models.FloatField(default=0.0, help_text="Overall trust score (0-100)")
+    trust_score = models.FloatField(default=0.0, help_text="Overall trust score (0-100)", blank=True, null=True)
     trust_level = models.CharField(max_length=20, choices=TRUST_LEVEL_CHOICES, default='BASIC')
     trust_score_last_calculated = models.DateTimeField(null=True, blank=True)
     trust_certificate_issued = models.BooleanField(default=False)
