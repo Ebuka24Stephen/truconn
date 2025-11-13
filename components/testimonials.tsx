@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import { Star } from "lucide-react"
 
 const testimonials = [
@@ -35,29 +34,24 @@ export function Testimonials() {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <motion.div
+        <div
           className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          data-aos="fade-up"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">Trusted by Communities</h2>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto">
             See what users are saying about their TruCon experience.
           </p>
-        </motion.div>
+        </div>
 
         {/* Testimonials Grid */}
         <div className="grid md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
-            <motion.div
+            <div
               key={index}
               className="bg-gradient-to-br from-gray-900/70 to-gray-900/40 border border-purple-500/30 rounded-xl p-8 backdrop-blur-xl hover:border-purple-500/50 transition-all"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
+              data-aos="fade-up"
+              data-aos-delay={index * 100}
             >
               {/* Rating */}
               <div className="flex gap-1 mb-4">
@@ -74,7 +68,7 @@ export function Testimonials() {
                 <div className="font-semibold text-white">{testimonial.name}</div>
                 <div className="text-sm text-gray-400">{testimonial.role}</div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

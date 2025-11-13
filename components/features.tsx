@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import { Shield, Eye, FileCheck } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
@@ -38,12 +37,9 @@ export function Features() {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <motion.div
+        <div
           className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          data-aos="fade-up"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-white">
             Empowered Data Control
@@ -52,19 +48,17 @@ export function Features() {
             Your right to data privacy and control. See, manage, and protect your personal information with complete
             transparency.
           </p>
-        </motion.div>
+        </div>
 
         {/* Features Grid */}
         <div className="grid md:grid-cols-3 gap-8">
           {features.map((feature, index) => {
             const Icon = feature.icon
             return (
-              <motion.div
+              <div
                 key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
+                data-aos="fade-up"
+                data-aos-delay={index * 100}
               >
                 <Card 
                   className="h-full card-hover group bg-gradient-to-br from-gray-900/50 to-gray-900/30 backdrop-blur-xl border-purple-500/20"
@@ -93,7 +87,7 @@ export function Features() {
                     </CardDescription>
                   </CardHeader>
                 </Card>
-              </motion.div>
+              </div>
             )
           })}
         </div>

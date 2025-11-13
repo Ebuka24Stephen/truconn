@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, ShieldCheck } from "lucide-react"
@@ -19,56 +18,50 @@ export function Hero() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-4xl mx-auto">
           {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+          <div
+            data-aos="fade-up"
             className="mb-8"
           >
             <div className="verified-badge">
               <ShieldCheck className="w-4 h-4" />
               <span>NDPR Compliant • Government Accredited</span>
             </div>
-          </motion.div>
+          </div>
 
           {/* Main Heading - Official Tagline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+          <h1
+            data-aos="fade-up"
+            data-aos-delay="100"
             className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6"
           >
             <span className="text-white">Your Data.{" "}</span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-violet-400">Your Choice.</span>{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Your Trust.</span>
-          </motion.h1>
+          </h1>
 
           {/* Description */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          <p
+            data-aos="fade-up"
+            data-aos-delay="200"
             className="text-lg md:text-xl leading-relaxed max-w-3xl mx-auto mb-4 text-gray-300"
           >
             A transparent, trust-first data consent and verification platform that empowers Nigerian citizens and 
             organizations to manage, verify, and consent to data usage securely.
-          </motion.p>
+          </p>
           
           {/* Built for Nigerians */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+          <p
+            data-aos="fade-up"
+            data-aos-delay="300"
             className="text-sm font-medium mb-8 text-cyan-400"
           >
             Built for Nigerians. Powered by Trust.
-          </motion.p>
+          </p>
 
           {/* CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+          <div
+            data-aos="fade-up"
+            data-aos-delay="400"
             className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4"
           >
             <Link href="/get-started">
@@ -84,13 +77,12 @@ export function Hero() {
                 Learn How TruCon Protects You
               </button>
             </Link>
-          </motion.div>
+          </div>
 
           {/* Trust Indicators */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
+          <div
+            data-aos="fade-up"
+            data-aos-delay="500"
             className="mt-16 pt-8 border-t border-purple-900/30"
           >
             <p className="text-sm font-medium mb-6 text-gray-400">
@@ -126,7 +118,7 @@ export function Hero() {
                 <span className="text-sm font-medium text-gray-400">Education</span>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

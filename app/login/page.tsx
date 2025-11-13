@@ -105,27 +105,28 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary via-primary-light to-primary flex items-center justify-center p-4">
-      {/* Background glow */}
+    <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse-glow" />
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl animate-pulse-glow" />
+        <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: "1s" }} />
       </div>
 
-      <div className="w-full max-w-md relative z-10 animate-fade-in">
+      <div className="w-full max-w-md relative z-10" data-aos="fade-up">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 mx-auto bg-white rounded-full flex items-center justify-center shadow-2xl mb-4">
-            <span className="text-2xl font-bold text-primary">✓</span>
+        <div className="text-center mb-8" data-aos="fade-up" data-aos-delay="100">
+          <div className="w-16 h-16 mx-auto bg-gradient-to-br from-purple-600 to-violet-700 rounded-full flex items-center justify-center shadow-2xl shadow-purple-500/50 mb-4">
+            <span className="text-2xl font-bold text-white">✓</span>
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">TruCon</h1>
-          <p className="text-white/80">Sign in to your account</p>
+          <p className="text-gray-300">Sign in to your account</p>
         </div>
 
         {/* Form Card */}
-        <Card className="bg-white/95 backdrop-blur-md border-white/20 shadow-2xl p-6 sm:p-8">
+        <Card className="bg-gradient-to-br from-gray-900/90 to-gray-900/70 backdrop-blur-xl border-purple-500/30 shadow-2xl p-6 sm:p-8" data-aos="fade-up" data-aos-delay="200">
           {/* Trust-first notice */}
-          <div className="mb-4 p-3 rounded-md border bg-neutral-50 border-neutral-200">
-            <p className="text-xs text-neutral-700">
+          <div className="mb-4 p-3 rounded-md border bg-purple-950/30 border-purple-500/30">
+            <p className="text-xs text-purple-200">
               TruCon never accesses your personal information without your explicit consent. Manage what your information
               is used for in your Dashboard at any time.
             </p>
@@ -134,39 +135,39 @@ function LoginForm() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Error Message */}
             {error && (
-              <div className="flex gap-3 p-4 bg-red-50 border border-red-200 rounded-lg animate-slide-down">
-                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-red-700">{error}</p>
+              <div className="flex gap-3 p-4 bg-red-900/30 border border-red-500/50 rounded-lg" data-aos="fade-up">
+                <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-300">{error}</p>
               </div>
             )}
 
             {/* Email Field */}
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-primary">Email Address</label>
+            <div className="space-y-2" data-aos="fade-up" data-aos-delay="300">
+              <label className="block text-sm font-medium text-purple-300">Email Address</label>
               <Input
                 type="email"
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white"
+                className="w-full px-4 py-2 border border-purple-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500/50 bg-white text-black placeholder:text-gray-500"
               />
             </div>
 
             {/* Password Field */}
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-primary">Password</label>
+            <div className="space-y-2" data-aos="fade-up" data-aos-delay="400">
+              <label className="block text-sm font-medium text-purple-300">Password</label>
               <div className="relative">
                 <Input
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white pr-10"
+                  className="w-full px-4 py-2 border border-purple-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500/50 bg-white text-black placeholder:text-gray-500 pr-10"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-primary transition"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-purple-400 transition"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -174,41 +175,41 @@ function LoginForm() {
             </div>
 
             {/* Remember Me & Forgot Password */}
-            <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center justify-between text-sm" data-aos="fade-up" data-aos-delay="500">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" className="w-4 h-4 rounded border-neutral-300" />
-                <span className="text-neutral-600">Remember me</span>
+                <input type="checkbox" className="w-4 h-4 rounded border-purple-500/50 bg-white" />
+                <span className="text-gray-300">Remember me</span>
               </label>
-              <a href="#" className="text-primary hover:text-primary-light transition font-medium">
+              <a href="#" className="text-purple-400 hover:text-purple-300 transition font-medium">
                 Forgot password?
               </a>
             </div>
 
             {/* Submit Button */}
-            <Button type="submit" disabled={isLoading} className="w-full bg-primary hover:bg-primary/90">
+            <Button type="submit" disabled={isLoading} className="w-full trust-button" data-aos="fade-up" data-aos-delay="600">
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
 
           {/* Divider */}
           <div className="my-6 flex items-center gap-4">
-            <div className="flex-1 h-px bg-neutral-300" />
-            <span className="text-sm text-neutral-500">or</span>
-            <div className="flex-1 h-px bg-neutral-300" />
+            <div className="flex-1 h-px bg-purple-900/30" />
+            <span className="text-sm text-gray-400">or</span>
+            <div className="flex-1 h-px bg-purple-900/30" />
           </div>
 
           {/* Sign Up Link */}
-          <p className="text-center text-neutral-600">
+          <p className="text-center text-gray-300">
             Don't have an account?{" "}
-            <Link href="/signup" className="text-primary hover:text-primary-light font-semibold transition">
+            <Link href="/signup" className="text-purple-400 hover:text-purple-300 font-semibold transition">
               Sign up
             </Link>
           </p>
         </Card>
 
         {/* Back to Home */}
-        <div className="text-center mt-6">
-          <Link href="/" className="text-white/80 hover:text-white transition text-sm">
+        <div className="text-center mt-6" data-aos="fade-up" data-aos-delay="700">
+          <Link href="/" className="text-gray-400 hover:text-white transition text-sm">
             Back to home
           </Link>
         </div>
@@ -219,14 +220,14 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-primary via-primary-light to-primary flex items-center justify-center p-4">
-        <div className="w-full max-w-md relative z-10 animate-fade-in">
+      <div className="min-h-screen bg-black flex items-center justify-center p-4">
+        <div className="w-full max-w-md relative z-10">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 mx-auto bg-white rounded-full flex items-center justify-center shadow-2xl mb-4">
-              <span className="text-2xl font-bold text-primary">✓</span>
+            <div className="w-16 h-16 mx-auto bg-gradient-to-br from-purple-600 to-violet-700 rounded-full flex items-center justify-center shadow-2xl shadow-purple-500/50 mb-4">
+              <span className="text-2xl font-bold text-white">✓</span>
             </div>
             <h1 className="text-3xl font-bold text-white mb-2">TruCon</h1>
-            <p className="text-white/80">Loading...</p>
+            <p className="text-gray-300">Loading...</p>
           </div>
         </div>
       </div>
