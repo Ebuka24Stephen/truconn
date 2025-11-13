@@ -106,3 +106,21 @@ class OrganizationAccessLog(APIView):
         )
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class OrganizationDetailView(APIView):
+    """Get current organization's detail information"""
+    permission_classes = [IsAuthenticated, IsOrganization]
+
+    def get(self, request):
+        try:
+            org = get_object_or_404(Org, user=request.user)
+            serializer = OrganizationSerializer(org)
+            return Response({
+                "organization": serializer.data
+            }, status=status.HTTP_200_OK)
+        except Org.DoesNotExist:
+            return Response(
+                {"error": "Organization not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )

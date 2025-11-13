@@ -1,5 +1,5 @@
 from django.urls import path 
-from .views import ConsentRequestView, RequestedConsentView, ConsentRevocationView, OrganizationAccessLog
+from .views import ConsentRequestView, RequestedConsentView, ConsentRevocationView, OrganizationAccessLog, OrganizationDetailView
 from .trust_views import TrustRegistryView, OrganizationTrustScoreView, OrganizationTrustScoreDetailView, DataIntegrityView
 from .report_views import PublicTransparencyReportView
 
@@ -8,6 +8,7 @@ urlpatterns = [
     path('requested-consent/', RequestedConsentView.as_view()),
     path('consent/<int:access_id>/toggle-access/', ConsentRevocationView.as_view()),
     path('citizens/list/', OrganizationAccessLog.as_view()),
+    path('detail/', OrganizationDetailView.as_view(), name='organization-detail'),
     # Trust Registry API endpoints
     path('trust/registry/', TrustRegistryView.as_view(), name='trust-registry'),
     path('trust/score/', OrganizationTrustScoreDetailView.as_view(), name='organization-trust-score'),

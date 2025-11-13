@@ -29,18 +29,18 @@ export function Stepper({ steps, currentStep, onStepChange, className }: Stepper
                 onClick={() => onStepChange?.(index)}
                 className={cn(
                   'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center border-2 transition-colors',
-                  isCompleted && 'border-emerald-500 text-emerald-600',
-                  isActive && 'border-[#004C99] text-[#004C99]',
-                  !isActive && !isCompleted && 'border-[#E0E4E8] text-[#8B95A1]'
+                  isCompleted && 'border-emerald-500 text-emerald-400 bg-emerald-500/20',
+                  isActive && 'border-purple-500 text-purple-400 bg-purple-500/20',
+                  !isActive && !isCompleted && 'border-purple-900/30 text-gray-500'
                 )}
                 aria-current={isActive ? 'step' : undefined}
               >
                 {isCompleted ? '✓' : index + 1}
               </button>
               <div>
-                <div className={cn('text-sm font-semibold', isActive ? 'text-[#004C99]' : 'text-[#222222]')}>{step.title}</div>
+                <div className={cn('text-sm font-semibold', isActive ? 'text-purple-300' : 'text-gray-400')}>{step.title}</div>
                 {step.description && (
-                  <div className="text-xs text-[#4A4A4A] mt-0.5">{step.description}</div>
+                  <div className="text-xs text-gray-500 mt-0.5">{step.description}</div>
                 )}
               </div>
             </li>

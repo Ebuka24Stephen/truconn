@@ -123,9 +123,36 @@ export default function SignUpPage() {
         }
         login(userData)
 
+        // Store signup data in localStorage for onboarding pre-fill
+        if (normalizedRole === "organization") {
+          localStorage.setItem('signup_data', JSON.stringify({
+            organizationName: formData.name || '',
+            website: formData.website || '',
+            address: formData.address || '',
+            email: formData.email,
+            providedFields: {
+              organizationName: !!formData.name,
+              website: !!formData.website,
+              address: !!formData.address,
+              email: true, // Always provided
+            }
+          }))
+        } else {
+          localStorage.setItem('signup_data', JSON.stringify({
+            firstName: formData.first_name || '',
+            lastName: formData.last_name || '',
+            email: formData.email,
+            providedFields: {
+              firstName: !!formData.first_name,
+              lastName: !!formData.last_name,
+              email: true, // Always provided
+            }
+          }))
+        }
+
         // Redirect based on role
         if (normalizedRole === "organization") {
-          router.push("/admin/organization")
+          router.push("/onboarding")
         } else {
           router.push("/onboarding")
         }

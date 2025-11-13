@@ -64,6 +64,7 @@ export interface Profile {
   url: string
   phone_no: string
   about: string
+  location: string
   profile_pic: string | null
 }
 
@@ -73,6 +74,7 @@ export interface UpdateProfileData {
   url?: string
   phone_no?: string
   about?: string
+  location?: string
 }
 
 export class AuthAPI {
@@ -216,12 +218,12 @@ export class AuthAPI {
    * Update user profile
    * PUT /api/auth/profile/
    */
-  static async updateProfile(data: UpdateProfileData): Promise<Profile> {
+  static async updateProfile(updateData: UpdateProfileData): Promise<Profile> {
     try {
-      const response = await fetch(`${API_BASE_URL}/profile/`, {
+      const response: Response = await fetch(`${API_BASE_URL}/profile/`, {
         method: "PUT",
         headers: getApiHeaders(),
-        body: JSON.stringify(data),
+        body: JSON.stringify(updateData),
         credentials: "include",
       })
 
@@ -234,7 +236,7 @@ export class AuthAPI {
           throw new Error("Backend service is currently unavailable. Please try again later.")
         }
         
-        let errorData
+        let errorData: any
         try {
           errorData = await response.json()
         } catch {
@@ -247,6 +249,7 @@ export class AuthAPI {
           errorData.url?.[0] ||
           errorData.phone_no?.[0] ||
           errorData.about?.[0] ||
+          errorData.location?.[0] ||
           errorData.error || 
           errorData.detail || 
           errorData.message || 
@@ -255,12 +258,12 @@ export class AuthAPI {
       }
 
       // Update activity on successful API call
-      const data = await response.json()
+      const profileData: Profile = await response.json()
       if (typeof window !== "undefined") {
         const now = Date.now()
         localStorage.setItem('last_activity', now.toString())
       }
-      return data
+      return profileData
     } catch (error) {
       if (error instanceof TypeError && error.message.includes("fetch")) {
         throw new Error("Failed to connect to server. Please check your internet connection.")

@@ -29,7 +29,74 @@ export interface ToggleAccessResponse {
   message: string
 }
 
+export interface OrganizationData {
+  id: number
+  name: string
+  email: string
+  website: string | null
+  address: string
+  trust_score: number | null
+  trust_level: string
+}
+
+export interface OrganizationDetailResponse {
+  organization: OrganizationData
+}
+
 export class OrganizationAPI {
+  /**
+   * Get current organization's data
+   * GET /api/organization/detail/
+   */
+  static async getOrganizationDetail(): Promise<OrganizationDetailResponse> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/organization/detail/`, {
+        method: "GET",
+        headers: getApiHeaders(),
+        credentials: "include",
+      })
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          await ApiInterceptor.handleSessionExpired()
+          throw new Error("Your session has expired. Please log in again.")
+        }
+        if (response.status === 403) {
+          throw new Error("Organization access required")
+        }
+        if (response.status === 404) {
+          throw new Error("Organization not found")
+        }
+        if (response.status === 502) {
+          throw new Error("Backend service is currently unavailable. Please try again later.")
+        }
+        
+        let errorData
+        try {
+          errorData = await response.json()
+        } catch {
+          throw new Error(`Failed to fetch organization: ${response.status}`)
+        }
+        
+        const errorMessage = errorData.error || errorData.detail || errorData.message || "Failed to fetch organization"
+        throw new Error(errorMessage)
+      }
+
+      // Update activity on successful API call
+      const data = await response.json()
+      if (typeof window !== "undefined") {
+        const now = Date.now()
+        localStorage.setItem('last_activity', now.toString())
+      }
+      return data
+    } catch (error) {
+      if (error instanceof TypeError && error.message.includes("fetch")) {
+        throw new Error("Failed to connect to server. Please check your internet connection.")
+      }
+      throw error
+    }
+  }
+
   static async getCitizens(): Promise<Array<{ id: number; full_name: string; access_requests: Array<{ consent: string; purpose: string; status: string; requested_at: string }> }>> {
     try {
       const response = await fetch(`${API_BASE_URL}/organization/citizens/list/`, {
