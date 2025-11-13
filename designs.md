@@ -128,3 +128,53 @@ Component Architecture
 │  • Transaction support for data consistency                     │
 │  • Audit trail with timestamps                                  │
 └─────────────────────────────────────────────────────────────────┘
+
+
+User Flows:
+┌─────────────┐
+│   Citizen   │
+└──────┬──────┘
+       │
+       │ 1. Visits TruCon Landing Page
+       ↓
+┌─────────────────────────────────┐
+│   /signup (Signup Page)         │
+│   • Email, Password, Role       │
+└──────┬────────────────────────────┘
+       │
+       │ 2. Submits Registration
+       ↓
+┌─────────────────────────────────┐
+│   POST /api/auth/signup/        │
+│   • Creates CustomUser          │
+│   • Creates Profile             │
+│   • Auto-login                  │
+└──────┬────────────────────────────┘
+       │
+       │ 3. Redirect to Onboarding
+       ↓
+┌─────────────────────────────────┐
+│   /onboarding (Onboarding Page) │
+│   • Pre-fills signup data       │
+│   • Complete profile            │
+│   • Set initial consent         │
+└──────┬────────────────────────────┘
+       │
+       │ 4. Save Profile & Consent
+       ↓
+┌─────────────────────────────────┐
+│   PUT /api/auth/profile/        │
+│   POST /api/consents/{id}/      │
+│        toggle/                  │
+│   • Update profile              │
+│   • Grant/revoke consents       │
+└──────┬────────────────────────────┘
+       │
+       │ 5. Complete Onboarding
+       ↓
+┌─────────────────────────────────┐
+│   /dashboard (Citizen Dashboard)│
+│   • View active consents        │
+│   • See trust score             │
+│   • Manage data access          │
+└─────────────────────────────────┘
