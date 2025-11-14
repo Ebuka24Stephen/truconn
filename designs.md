@@ -367,3 +367,4 @@ Flow 5: Trust Score & Compliance
 │   • See trust scores            │     │
 │   • Check certificates          │     │
 └─────────────────────────────────┘     │
+-----------------------------------------
