@@ -182,8 +182,9 @@ CORS_PREFLIGHT_MAX_AGE = 86400
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_AGE = 5 * 60 * 60  # 5 hours
+ SESSION_COOKIE_AGE = 30 * 24 * 60 * 60  # 30 days (matches refresh token lifetime)
 SESSION_SAVE_EVERY_REQUEST = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep session across browser restarts
 
 # --------------------------------------------------
 # AUTO FIELD
@@ -192,11 +193,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=24),  # Increased from 30 minutes to 24 hours
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),  # Increased from 7 days to 30 days
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "ALGORITHM": "HS256",
     "SIGNING_KEY": SECRET_KEY,
     "AUTH_HEADER_TYPES": ("Bearer",),
+    "UPDATE_LAST_LOGIN": True,
 }

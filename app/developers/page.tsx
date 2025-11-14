@@ -106,7 +106,6 @@ curl -X GET "https://truconn.onrender.com/api/organization/trust/registry/?limit
           {/* Header */}
           <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-8">
             <div className="flex items-center gap-4 mb-4">
-              {isAuthenticated && <BackButton href={user?.role === "organization" ? "/admin/organization" : "/dashboard"} className="mb-4" />}
               <div className="p-3 bg-primary/10 rounded-lg">
                 <Code className="w-8 h-8 text-primary" />
               </div>

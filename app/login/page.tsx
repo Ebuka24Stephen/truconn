@@ -46,9 +46,8 @@ function LoginForm() {
           ...response.user,
           role: normalizedRole,
         }
-        login(userData)
-
-        // Persist JWT access token when provided (preferred over CSRF/session for API)
+        
+        // Persist JWT access token FIRST (before setting user to prevent conflicts)
         if ((response as any).access) {
           // Store JWT for Authorization header
           SessionManager.setJwtToken((response as any).access)
@@ -59,6 +58,12 @@ function LoginForm() {
             SessionManager.setToken(csrf)
           }
         }
+        
+        // Set user data AFTER token is stored to ensure session is complete
+        login(userData)
+        
+        // Small delay to ensure state is set before redirect
+        await new Promise(resolve => setTimeout(resolve, 100))
         
         // Check for redirect parameter
         const redirectTo = searchParams.get("redirect")

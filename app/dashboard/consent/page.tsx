@@ -96,16 +96,16 @@ export default function ConsentManagementPage() {
   }
 
   return (
-    <div className="flex h-screen bg-neutral-50">
+    <div className="flex h-screen bg-black">
       <CitizenSidebar />
 
       <main className="flex-1 overflow-auto">
         {/* Header */}
-        <div className="sticky top-0 z-40 bg-white border-b border-neutral-200 p-6 shadow-sm">
+        <div className="sticky top-0 z-40 glass-effect border-b border-purple-900/30 p-6">
           <div className="max-w-7xl mx-auto">
             <BackButton href="/dashboard" className="mb-4" />
-            <h1 className="text-3xl font-bold text-primary">Consent Management</h1>
-            <p className="text-neutral-600 mt-1">Control what data categories can be accessed</p>
+            <h1 className="text-3xl font-bold text-white">Consent Management</h1>
+            <p className="text-gray-400 mt-1">Control what data categories can be accessed</p>
           </div>
         </div>
 
@@ -114,21 +114,21 @@ export default function ConsentManagementPage() {
           <div className="max-w-4xl mx-auto space-y-6">
             {/* Error Message */}
             {error && (
-              <Card className="bg-red-50 border-red-200">
+              <Card className="bg-red-900/30 border-red-500/50">
                 <CardContent className="pt-6">
-                  <div className="flex items-center gap-2 text-red-900">
+                  <div className="flex items-center gap-2 text-red-400">
                     <AlertCircle className="w-5 h-5" />
-                    <p className="text-sm">{error}</p>
+                    <p className="text-sm text-red-300">{error}</p>
                   </div>
                 </CardContent>
               </Card>
             )}
 
             {/* Info Card */}
-            <Card className="bg-blue-50 border-blue-200">
+            <Card className="bg-purple-950/30 border-purple-500/30">
               <CardContent className="pt-6">
-                <p className="text-sm text-blue-900">
-                  <strong>Your Right to Control:</strong> Under NDPR, you have the right to grant, modify, or revoke
+                <p className="text-sm text-purple-200">
+                  <strong className="text-purple-300">Your Right to Control:</strong> Under NDPR, you have the right to grant, modify, or revoke
                   consent for your personal data at any time. Changes take effect immediately.
                 </p>
               </CardContent>
@@ -136,24 +136,24 @@ export default function ConsentManagementPage() {
 
             {/* Loading State */}
             {isLoading ? (
-              <Card>
+              <Card className="bg-gradient-to-br from-gray-900/70 to-gray-900/40 border-purple-500/30 backdrop-blur-xl">
                 <CardContent className="pt-6">
-                  <p className="text-center text-neutral-500">Loading consents...</p>
+                  <p className="text-center text-gray-400">Loading consents...</p>
                 </CardContent>
               </Card>
             ) : (
               <>
                 {/* Consent Categories */}
                 {consents.length === 0 ? (
-                  <Card>
+                  <Card className="bg-gradient-to-br from-gray-900/70 to-gray-900/40 border-purple-500/30 backdrop-blur-xl">
                     <CardContent className="pt-6">
-                      <p className="text-center text-neutral-500">No consent categories available</p>
+                      <p className="text-center text-gray-400">No consent categories available</p>
                     </CardContent>
                   </Card>
                 ) : (
                   <div className="space-y-4">
                 {consents.map((consent, index) => (
-                      <Card key={`${consent.id}-${index}`}>
+                      <Card key={`${consent.id}-${index}`} className="bg-gradient-to-br from-gray-900/70 to-gray-900/40 border-purple-500/30 backdrop-blur-xl">
                         <CardContent className="pt-6">
                           <ConsentToggle
                             category={consent.name as "Financial" | "Biometric" | "Health" | "Identity"}
@@ -172,34 +172,34 @@ export default function ConsentManagementPage() {
             )}
 
             {/* Summary */}
-            <Card>
+            <Card className="bg-gradient-to-br from-gray-900/70 to-gray-900/40 border-purple-500/30 backdrop-blur-xl">
               <CardHeader>
-                <CardTitle>Consent Summary</CardTitle>
-                <CardDescription>Overview of your current consent settings</CardDescription>
+                <CardTitle className="text-white">Consent Summary</CardTitle>
+                <CardDescription className="text-gray-400">Overview of your current consent settings</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="text-center p-4 bg-neutral-50 rounded-lg">
-                    <div className="text-2xl font-bold text-primary">{consents.length}</div>
-                    <div className="text-sm text-neutral-600 mt-1">Total Categories</div>
+                  <div className="text-center p-4 bg-gray-900/50 border border-purple-500/30 rounded-lg">
+                    <div className="text-2xl font-bold text-purple-300">{consents.length}</div>
+                    <div className="text-sm text-gray-400 mt-1">Total Categories</div>
                   </div>
-                  <div className="text-center p-4 bg-emerald-50 rounded-lg">
-                    <div className="text-2xl font-bold text-emerald-600">
+                  <div className="text-center p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
+                    <div className="text-2xl font-bold text-emerald-400">
                       {consents.filter((c) => c.allowed).length}
                     </div>
-                    <div className="text-sm text-neutral-600 mt-1">Granted</div>
+                    <div className="text-sm text-gray-400 mt-1">Granted</div>
                   </div>
-                  <div className="text-center p-4 bg-red-50 rounded-lg">
-                    <div className="text-2xl font-bold text-red-600">
+                  <div className="text-center p-4 bg-red-900/20 border border-red-500/30 rounded-lg">
+                    <div className="text-2xl font-bold text-red-400">
                       {consents.filter((c) => !c.allowed).length}
                     </div>
-                    <div className="text-sm text-neutral-600 mt-1">Denied</div>
+                    <div className="text-sm text-gray-400 mt-1">Denied</div>
                   </div>
-                  <div className="text-center p-4 bg-blue-50 rounded-lg">
-                    <div className="text-2xl font-bold text-blue-600">
+                  <div className="text-center p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+                    <div className="text-2xl font-bold text-blue-400">
                       {consents.reduce((acc, c) => acc + (c.allowed ? c.organizations.length : 0), 0)}
                     </div>
-                    <div className="text-sm text-neutral-600 mt-1">Organizations</div>
+                    <div className="text-sm text-gray-400 mt-1">Organizations</div>
                   </div>
                 </div>
               </CardContent>

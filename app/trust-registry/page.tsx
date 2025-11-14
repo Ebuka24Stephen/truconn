@@ -73,7 +73,6 @@ export default function TrustRegistryPage() {
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Header */}
           <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
-            {isAuthenticated && <BackButton href={user?.role === "organization" ? "/admin/organization" : "/dashboard"} className="mb-4" />}
             <div className="flex items-center gap-3 mb-2">
               <Shield className="w-8 h-8 text-primary" />
               <h1 className="text-3xl font-bold text-primary">Trust Registry</h1>

@@ -139,16 +139,16 @@ export default function DataAccessPage() {
   }
 
   return (
-    <div className="flex h-screen bg-neutral-50">
+    <div className="flex h-screen bg-black">
       <CitizenSidebar />
 
       <main className="flex-1 overflow-auto">
         {/* Header */}
-        <div className="sticky top-0 z-40 bg-white border-b border-neutral-200 p-6 shadow-sm">
+        <div className="sticky top-0 z-40 glass-effect border-b border-purple-900/30 p-6">
           <div className="max-w-7xl mx-auto">
             <BackButton href="/dashboard" className="mb-4" />
-            <h1 className="text-3xl font-bold text-primary">My Data Access</h1>
-            <p className="text-neutral-600 mt-1">View and manage organizations accessing your data</p>
+            <h1 className="text-3xl font-bold text-white">My Data Access</h1>
+            <p className="text-gray-400 mt-1">View and manage organizations accessing your data</p>
           </div>
         </div>
 
@@ -156,17 +156,17 @@ export default function DataAccessPage() {
         <div className="p-6">
           <div className="max-w-7xl mx-auto space-y-6">
             {/* Filters */}
-            <Card>
+            <Card className="bg-gradient-to-br from-gray-900/70 to-gray-900/40 border-purple-500/30 backdrop-blur-xl">
               <CardContent className="pt-6">
                 <div className="flex flex-col md:flex-row gap-4">
                   <div className="flex-1 relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <Input
                       type="text"
                       placeholder="Search by organization, data type, or purpose..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10"
+                      className="pl-10 bg-white text-black placeholder:text-gray-500 border-purple-500/30"
                     />
                   </div>
                   <div className="flex gap-2">
@@ -175,7 +175,7 @@ export default function DataAccessPage() {
                         key={status}
                         variant={selectedStatus === status ? "default" : "outline"}
                         onClick={() => setSelectedStatus(status)}
-                        className="capitalize"
+                        className={selectedStatus === status ? "trust-button capitalize" : "border-purple-500/50 text-purple-300 hover:bg-purple-500/20 capitalize"}
                       >
                         {status}
                       </Button>
@@ -187,21 +187,21 @@ export default function DataAccessPage() {
 
             {/* Error Message */}
             {error && (
-              <Card className="bg-red-50 border-red-200">
+              <Card className="bg-red-900/30 border-red-500/50">
                 <CardContent className="pt-6">
-                  <div className="flex items-center gap-2 text-red-900">
+                  <div className="flex items-center gap-2 text-red-400">
                     <AlertCircle className="w-5 h-5" />
-                    <p className="text-sm">{error}</p>
+                    <p className="text-sm text-red-300">{error}</p>
                   </div>
                 </CardContent>
               </Card>
             )}
 
             {/* Table */}
-            <Card>
+            <Card className="bg-gradient-to-br from-gray-900/70 to-gray-900/40 border-purple-500/30 backdrop-blur-xl">
               <CardHeader>
-                <CardTitle>Data Access Requests</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-white">Data Access Requests</CardTitle>
+                <CardDescription className="text-gray-400">
                   {isLoading
                     ? "Loading..."
                     : `${filteredData.length} organization${filteredData.length !== 1 ? "s" : ""} with access to your data`}
@@ -209,37 +209,37 @@ export default function DataAccessPage() {
               </CardHeader>
               <CardContent>
                 {isLoading ? (
-                  <div className="text-center py-8 text-neutral-500">Loading data access requests...</div>
+                  <div className="text-center py-8 text-gray-400">Loading data access requests...</div>
                 ) : (
                   <Table>
                     <TableHeader>
-                      <TableRow>
-                        <TableHead>Organization Name</TableHead>
-                        <TableHead>Data Type</TableHead>
-                        <TableHead>Requested At</TableHead>
-                        <TableHead>Purpose</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
+                      <TableRow className="border-purple-900/30">
+                        <TableHead className="text-gray-300">Organization Name</TableHead>
+                        <TableHead className="text-gray-300">Data Type</TableHead>
+                        <TableHead className="text-gray-300">Requested At</TableHead>
+                        <TableHead className="text-gray-300">Purpose</TableHead>
+                        <TableHead className="text-gray-300">Status</TableHead>
+                        <TableHead className="text-right text-gray-300">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredData.length === 0 ? (
-                        <TableRow>
-                          <TableCell colSpan={6} className="text-center py-8 text-neutral-500">
+                        <TableRow className="border-purple-900/30">
+                          <TableCell colSpan={6} className="text-center py-8 text-gray-400">
                             No data access records found
                           </TableCell>
                         </TableRow>
                       ) : (
                         filteredData.map((item) => (
-                          <TableRow key={item.id}>
-                            <TableCell className="font-semibold">{item.organizationName}</TableCell>
+                          <TableRow key={item.id} className="border-purple-900/30 hover:bg-purple-900/10">
+                            <TableCell className="font-semibold text-white">{item.organizationName}</TableCell>
                             <TableCell>
-                              <Badge variant="outline">{item.dataType}</Badge>
+                              <Badge variant="outline" className="border-purple-500/50 text-purple-300">{item.dataType}</Badge>
                             </TableCell>
-                            <TableCell className="text-sm text-neutral-500">
+                            <TableCell className="text-sm text-gray-400">
                               {item.lastAccessed ? new Date(item.lastAccessed).toLocaleDateString() : "N/A"}
                             </TableCell>
-                            <TableCell className="text-sm">{item.purpose}</TableCell>
+                            <TableCell className="text-sm text-gray-300">{item.purpose}</TableCell>
                             <TableCell>
                               <Badge
                                 variant={
@@ -248,6 +248,13 @@ export default function DataAccessPage() {
                                     : item.status === "pending"
                                       ? "warning"
                                       : "destructive"
+                                }
+                                className={
+                                  item.status === "active"
+                                    ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/50"
+                                    : item.status === "pending"
+                                      ? "bg-amber-500/20 text-amber-400 border-amber-500/50"
+                                      : "bg-red-500/20 text-red-400 border-red-500/50"
                                 }
                               >
                                 {item.status}
@@ -260,6 +267,7 @@ export default function DataAccessPage() {
                                     variant="destructive"
                                     size="sm"
                                     onClick={() => handleRevoke(item.id)}
+                                    className="bg-red-600 hover:bg-red-700 text-white"
                                   >
                                     <X className="w-4 h-4 mr-1" />
                                     {item.status === "pending" ? "Reject" : "Revoke"}
@@ -270,6 +278,7 @@ export default function DataAccessPage() {
                                     variant="default"
                                     size="sm"
                                     onClick={() => handleRevoke(item.id)}
+                                    className="trust-button"
                                   >
                                     Approve
                                   </Button>

@@ -27,7 +27,6 @@ export default function HelpPage() {
       <div className={`${SidebarComponent ? 'flex-1 overflow-auto' : ''} px-4 py-10`}>
         <div className="max-w-5xl mx-auto space-y-8">
           <div>
-            {isAuthenticated && <BackButton href={user?.role === "organization" ? "/admin/organization" : "/dashboard"} className="mb-4" />}
             <h1 className="text-3xl font-bold" style={{ color: '#004C99' }}>Help & Trust Education</h1>
             <p className="mt-2" style={{ color: '#4A4A4A' }}>Learn how TruCon protects your data and empowers your choices.</p>
           </div>

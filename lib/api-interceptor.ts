@@ -10,7 +10,7 @@ import { AuthAPI } from "./auth/api"
 export class ApiInterceptor {
   private static lastActivityTime: number = Date.now()
   private static activityCheckInterval: NodeJS.Timeout | null = null
-  private static readonly INACTIVITY_TIMEOUT = 5 * 60 * 60 * 1000 // 5 hours in milliseconds
+  private static readonly INACTIVITY_TIMEOUT = 30 * 24 * 60 * 60 * 1000 // 30 days in milliseconds (matches refresh token)
 
   /**
    * Initialize activity tracking

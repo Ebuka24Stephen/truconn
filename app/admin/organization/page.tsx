@@ -89,21 +89,21 @@ export default function OrganizationDashboard() {
   const pendingRequests = pendingCount
 
   return (
-    <div className="flex h-screen bg-neutral-50">
+    <div className="flex h-screen bg-black">
       <OrganizationSidebar />
 
       <main className="flex-1 overflow-auto">
         {/* Header */}
-        <div className="sticky top-0 z-40 bg-white border-b border-neutral-200 p-6 shadow-sm">
+        <div className="sticky top-0 z-40 glass-effect border-b border-purple-900/30 p-6">
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-primary">Dashboard Overview</h1>
-                <p className="text-neutral-600 mt-1">Monitor compliance and data usage</p>
+                <h1 className="text-3xl font-bold text-white">Dashboard Overview</h1>
+                <p className="text-gray-400 mt-1">Monitor compliance and data usage</p>
               </div>
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                  <span className="text-primary font-semibold">ORG</span>
+                <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-violet-700 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/50">
+                  <span className="text-white font-semibold">ORG</span>
                 </div>
               </div>
             </div>
@@ -161,10 +161,10 @@ export default function OrganizationDashboard() {
 
             {/* Data Integrity Badge */}
             {trustData?.data_integrity && (
-              <Card>
+              <Card className="bg-gradient-to-br from-gray-900/70 to-gray-900/40 border-purple-500/30 backdrop-blur-xl">
                 <CardHeader>
-                  <CardTitle>Data Integrity Status</CardTitle>
-                  <CardDescription>Cryptographic verification of data integrity</CardDescription>
+                  <CardTitle className="text-white">Data Integrity Status</CardTitle>
+                  <CardDescription className="text-gray-400">Cryptographic verification of data integrity</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <DataIntegrityBadge
@@ -174,9 +174,9 @@ export default function OrganizationDashboard() {
                     showDetails={true}
                   />
                   {trustData.data_integrity.issues.length > 0 && (
-                    <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded">
-                      <p className="text-sm font-medium text-red-900 mb-2">Integrity Issues Detected:</p>
-                      <ul className="text-sm text-red-800 space-y-1">
+                    <div className="mt-4 p-3 bg-red-900/30 border border-red-500/50 rounded">
+                      <p className="text-sm font-medium text-red-400 mb-2">Integrity Issues Detected:</p>
+                      <ul className="text-sm text-red-300 space-y-1">
                         {trustData.data_integrity.issues.map((issue, idx) => (
                           <li key={idx}>• Request #{issue.request_id}: {issue.issue}</li>
                         ))}
@@ -189,10 +189,10 @@ export default function OrganizationDashboard() {
 
             {/* Data Access Chart Placeholder & Recent Requests */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
+              <Card className="bg-gradient-to-br from-gray-900/70 to-gray-900/40 border-purple-500/30 backdrop-blur-xl">
                 <CardHeader>
-                  <CardTitle>Data Access Frequency</CardTitle>
-                  <CardDescription>Access by data type (last 30 days)</CardDescription>
+                  <CardTitle className="text-white">Data Access Frequency</CardTitle>
+                  <CardDescription className="text-gray-400">Access by data type (last 30 days)</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -204,10 +204,10 @@ export default function OrganizationDashboard() {
                     ].map((item) => (
                       <div key={item.type}>
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium">{item.type}</span>
-                          <span className="text-sm text-neutral-500">{item.count}</span>
+                          <span className="text-sm font-medium text-gray-300">{item.type}</span>
+                          <span className="text-sm text-gray-400">{item.count}</span>
                         </div>
-                        <div className="w-full h-3 bg-neutral-200 rounded-full overflow-hidden">
+                        <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
                           <div
                             className={`h-full ${item.color} rounded-full`}
                             style={{ width: `${(item.count / 145) * 100}%` }}
@@ -219,24 +219,24 @@ export default function OrganizationDashboard() {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="bg-gradient-to-br from-gray-900/70 to-gray-900/40 border-purple-500/30 backdrop-blur-xl">
                 <CardHeader>
-                  <CardTitle>Recent Consent Requests</CardTitle>
-                  <CardDescription>Latest requests requiring action</CardDescription>
+                  <CardTitle className="text-white">Recent Consent Requests</CardTitle>
+                  <CardDescription className="text-gray-400">Latest requests requiring action</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     {recentRows.map((request) => (
                       <div
                         key={request.id}
-                        className="flex items-start justify-between pb-4 border-b last:border-0"
+                        className="flex items-start justify-between pb-4 border-b border-purple-900/30 last:border-0"
                       >
                         <div className="flex-1">
-                          <p className="font-semibold text-sm text-primary">{request.citizenName}</p>
-                          <p className="text-xs text-neutral-500 mt-1">
+                          <p className="font-semibold text-sm text-purple-300">{request.citizenName}</p>
+                          <p className="text-xs text-gray-400 mt-1">
                             Recent consent request
                           </p>
-                          <p className="text-xs text-neutral-400 mt-1">
+                          <p className="text-xs text-gray-500 mt-1">
                             {new Date(request.requestedAt).toLocaleDateString()}
                           </p>
                         </div>
@@ -248,13 +248,20 @@ export default function OrganizationDashboard() {
                                 ? "warning"
                                 : "destructive"
                           }
+                          className={
+                            request.status === "approved"
+                              ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/50"
+                              : request.status === "pending"
+                                ? "bg-amber-500/20 text-amber-400 border-amber-500/50"
+                                : "bg-red-500/20 text-red-400 border-red-500/50"
+                          }
                         >
                           {request.status}
                         </Badge>
                       </div>
                     ))}
                   </div>
-                  <Button variant="outline" className="w-full mt-4" asChild>
+                  <Button variant="outline" className="w-full mt-4 border-purple-500/50 text-purple-300 hover:bg-purple-500/20" asChild>
                     <Link href="/admin/organization/consent-requests">View All Requests</Link>
                   </Button>
                 </CardContent>
@@ -262,18 +269,18 @@ export default function OrganizationDashboard() {
             </div>
 
             {/* Compliance Alert */}
-            <Card className="bg-amber-50 border-amber-200">
+            <Card className="bg-amber-900/20 border-amber-500/30">
               <CardContent className="pt-6">
                 <div className="flex items-start gap-4">
-                  <AlertCircle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
+                  <AlertCircle className="w-6 h-6 text-amber-400 flex-shrink-0 mt-1" />
                   <div className="flex-1">
-                    <h3 className="font-semibold text-amber-900 mb-2">Compliance Reminder</h3>
-                    <p className="text-sm text-amber-800">
+                    <h3 className="font-semibold text-amber-300 mb-2">Compliance Reminder</h3>
+                    <p className="text-sm text-amber-200">
                       Your organization has {pendingRequests} pending consent requests. Ensure timely processing to
                       maintain NDPR compliance.
                     </p>
                   </div>
-                  <Button variant="outline" size="sm" asChild>
+                  <Button variant="outline" size="sm" className="border-purple-500/50 text-purple-300 hover:bg-purple-500/20" asChild>
                     <Link href="/admin/organization/consent-requests">Review Now</Link>
                   </Button>
                 </div>

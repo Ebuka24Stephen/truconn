@@ -51,11 +51,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const login = (userData: User) => {
-    // Clear any previous session data first to prevent session mixing
-    SessionManager.clearSession()
-    // Set new user data
-    SessionManager.setUser(userData)
-    setUser(userData)
+    // Set new user data first, then clear only if necessary
+    // This prevents race conditions where the session is cleared before it's set
+    try {
+      SessionManager.setUser(userData)
+      setUser(userData)
+      // Trigger storage event to sync across tabs
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new StorageEvent('storage', {
+          key: 'truconn_user',
+          newValue: JSON.stringify(userData)
+        }))
+      }
+    } catch (error) {
+      console.error("Error setting user session:", error)
+      // Only clear if setting failed
+      SessionManager.clearSession()
+      setUser(null)
+    }
   }
 
   const logout = async () => {

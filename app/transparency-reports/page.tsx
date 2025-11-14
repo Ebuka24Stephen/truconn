@@ -148,7 +148,6 @@ export default function TransparencyReportsPage() {
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Header */}
           <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
-            {isAuthenticated && <BackButton href={user?.role === "organization" ? "/admin/organization" : "/dashboard"} className="mb-4" />}
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-primary mb-2">Community Transparency Report</h1>

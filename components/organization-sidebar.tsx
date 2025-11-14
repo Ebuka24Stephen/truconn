@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { LayoutDashboard, FileCheck, Database, Shield, FileText, Settings, LogOut, User, BookOpen, Code, ShieldCheck, BarChart3, HelpCircle, Rocket } from "lucide-react"
+import { LayoutDashboard, FileCheck, Database, Shield, FileText, Settings, LogOut, User, Rocket } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/lib/auth/context"
 
@@ -32,14 +32,8 @@ export function OrganizationSidebar() {
     { href: "/settings", label: "Settings", icon: Settings },
   ]
 
-  // Public pages accessible to organizations (developer portal is org-focused)
-  const publicPages = [
-    { href: "/developers", label: "Developer Portal", icon: Code },
-    { href: "/learn", label: "Learn & Education", icon: BookOpen },
-    { href: "/trust-registry", label: "Trust Registry", icon: ShieldCheck },
-    { href: "/transparency-reports", label: "Transparency Reports", icon: BarChart3 },
-    { href: "/help", label: "Help & FAQ", icon: HelpCircle },
-  ]
+  // Removed public pages - they're accessible from landing page
+  // Public pages like /trust-registry, /developers, /transparency-reports, /help are accessible from landing page only
 
   // Check if onboarding is needed
   const needsOnboarding = typeof window !== "undefined" && 
@@ -47,14 +41,14 @@ export function OrganizationSidebar() {
     !localStorage.getItem("onboarding_skipped")
 
   return (
-    <aside className="w-64 bg-white border-r border-neutral-200 h-screen sticky top-0 flex flex-col">
+    <aside className="w-64 bg-gradient-to-b from-gray-950 to-black border-r border-purple-900/30 h-screen sticky top-0 flex flex-col">
       {/* Logo */}
-      <div className="p-6 border-b border-neutral-200">
-        <Link href="/admin/organization" className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+      <div className="p-6 border-b border-purple-900/30">
+        <Link href="/admin/organization" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-violet-700 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/50">
             <span className="text-lg font-bold text-white">✓</span>
           </div>
-          <span className="text-xl font-bold text-primary">TruCon NDTS</span>
+          <span className="text-xl font-bold text-white">TruCon NDTS</span>
         </Link>
       </div>
 
@@ -65,10 +59,10 @@ export function OrganizationSidebar() {
           <Link
             href="/admin/organization/onboarding"
             className={cn(
-              "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors mb-2",
+              "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 mb-2",
               pathname === "/admin/organization/onboarding"
-                ? "bg-amber-100 text-amber-700 font-semibold border border-amber-300"
-                : "bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200",
+                ? "bg-gradient-to-r from-amber-600/30 to-yellow-600/30 text-amber-300 font-semibold border border-amber-500/50 shadow-lg shadow-amber-500/20"
+                : "bg-amber-900/20 text-amber-400 hover:bg-amber-900/30 border border-amber-500/30",
             )}
           >
             <Rocket className="w-5 h-5" />
@@ -88,10 +82,10 @@ export function OrganizationSidebar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
+                  "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200",
                   isActive
-                    ? "bg-primary/10 text-primary font-semibold"
-                    : "text-neutral-600 hover:bg-neutral-100",
+                    ? "bg-gradient-to-r from-purple-600/30 to-violet-600/30 text-purple-300 font-semibold border border-purple-500/50 shadow-lg shadow-purple-500/20"
+                    : "text-gray-400 hover:bg-purple-900/20 hover:text-purple-300",
                 )}
               >
                 <Icon className="w-5 h-5" />
@@ -100,41 +94,13 @@ export function OrganizationSidebar() {
             )
           })}
         </div>
-
-        {/* Public Pages Section */}
-        <div className="pt-4 mt-4 border-t border-neutral-200">
-          <p className="px-4 text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">
-            Resources
-          </p>
-          <div className="space-y-1">
-            {publicPages.map((item) => {
-              const Icon = item.icon
-              const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
-                    isActive
-                      ? "bg-primary/10 text-primary font-semibold"
-                      : "text-neutral-600 hover:bg-neutral-100",
-                  )}
-                >
-                  <Icon className="w-5 h-5" />
-                  <span>{item.label}</span>
-                </Link>
-              )
-            })}
-          </div>
-        </div>
       </nav>
 
       {/* Logout */}
-      <div className="p-4 border-t border-neutral-200">
+      <div className="p-4 border-t border-purple-900/30">
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-neutral-600 hover:bg-neutral-100 transition-colors"
+          className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-gray-400 hover:bg-red-900/20 hover:text-red-400 transition-all duration-200"
         >
           <LogOut className="w-5 h-5" />
           <span>Logout</span>
