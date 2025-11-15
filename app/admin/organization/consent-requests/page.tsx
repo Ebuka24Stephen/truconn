@@ -180,7 +180,7 @@ export default function ConsentRequestsPage() {
                         flattened.map((request) => (
                           <TableRow key={request.id}>
                             <TableCell className="font-semibold">
-                              {request.citizenName} (#{request.citizenId})
+                              {request.citizenName} ({request.citizenId})
                             </TableCell>
                             <TableCell>
                               <Badge variant="outline">{request.dataType}</Badge>
