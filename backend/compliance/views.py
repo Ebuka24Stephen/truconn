@@ -11,172 +11,63 @@ from organization.permissions import IsOrganization
 from .rules_engine import NDPRRulesEngine
 from .models import ComplianceAudit, ViolationReport
 from .serializers import (
-    ComplianceAuditSerializer, 
+    ComplianceAuditSerializer,
     ViolationReportSerializer,
     ComplianceScanResultSerializer
 )
 
-
 class ComplianceScanView(APIView):
-    """
-    Run compliance scan for an organization and return results.
-    Ensures idempotent creation of audits and violation reports
-    (prevents duplicates within 30 days).
-    """
     permission_classes = [IsAuthenticated, IsOrganization]
     DUPLICATE_WINDOW_DAYS = 30
 
     def post(self, request):
-        """Run a full compliance scan"""
         try:
             organization = get_object_or_404(Org, user=request.user)
-            window_start = timezone.now() - timedelta(days=self.DUPLICATE_WINDOW_DAYS)
-
-            # 1️⃣ Run compliance checks
             scan_result = NDPRRulesEngine.run_all_checks(organization)
+            audit_records = NDPRRulesEngine.create_audit_records(organization, scan_result)
 
-            # Prepare violation entries
-            violations_data = []
-            for v in scan_result.get('violations', []):
-                violation_type = v.get('violation_type')
-                if not violation_type:
-                    continue
-                violations_data.append({
-                    "violation_type": violation_type,
-                    "description": v.get('description', ''),
-                    "affected_users_count": v.get('affected_users_count', 0)
-                })
-
-            # Prepare audit entries
-            audits_data = []
-            for a in scan_result.get('audits', []):
-                rule_name = a.get('rule_name')
-                if not rule_name:
-                    continue
-                audits_data.append({
-                    "rule_name": rule_name,
-                    "rule_description": a.get('rule_description', ''),
-                    "severity": a.get('severity', 'MEDIUM'),
-                    "details": a.get('details', {}),
-                    "recommendation": a.get('recommendation', '')
-                })
-
-            # 2️⃣ Idempotent creation of ComplianceAudit
-            audit_records = []
-            for audit in audits_data:
-                exists = ComplianceAudit.objects.filter(
-                    organization=organization,
-                    rule_name=audit['rule_name'],
-                    detected_at__gte=window_start
-                ).exists()
-
-                if not exists:
-                    audit_obj = ComplianceAudit.objects.create(
-                        organization=organization,
-                        rule_name=audit['rule_name'],
-                        rule_description=audit['rule_description'],
-                        severity=audit['severity'],
-                        status='PENDING',
-                        details=audit['details'],
-                        recommendation=audit['recommendation']
-                    )
-                    audit_records.append(audit_obj)
-
-            # 3️⃣ Idempotent creation of ViolationReport
-            violation_records = []
-            for violation in violations_data:
-                exists = ViolationReport.objects.filter(
-                    organization=organization,
-                    violation_type=violation['violation_type'],
-                    detected_at__gte=window_start
-                ).exists()
-
-                if not exists:
-                    violation_obj = ViolationReport.objects.create(
-                        organization=organization,
-                        violation_type=violation['violation_type'],
-                        description=violation['description'],
-                        affected_users_count=violation['affected_users_count'],
-                        related_audit=None
-                    )
-                    violation_records.append(violation_obj)
-
-            # Serialize records
             audit_serializer = ComplianceAuditSerializer(audit_records, many=True)
+            violation_records = []
+            for audit in audit_records:
+                violation_records.extend(audit.violationreport_set.all())
             violation_serializer = ViolationReportSerializer(violation_records, many=True)
 
             result_data = {
                 'risk_score': scan_result.get('risk_score', 0),
-                'total_violations': scan_result.get('total_violations', len(violations_data)),
+                'total_violations': scan_result.get('total_violations', len(violation_records)),
                 'critical_count': scan_result.get('critical_count', 0),
                 'high_count': scan_result.get('high_count', 0),
                 'medium_count': scan_result.get('medium_count', 0),
+                'audits': audit_serializer.data,
                 'violations': violation_serializer.data,
-                'audit_records': audit_serializer.data
             }
 
             serializer = ComplianceScanResultSerializer(result_data)
-            return Response({
-                'message': 'Compliance scan completed successfully',
-                'data': serializer.data
-            }, status=status.HTTP_200_OK)
-
+            return Response({'message': 'Compliance scan completed', 'data': serializer.data}, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({
-                'error': f'Compliance scan failed: {str(e)}'
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def get(self, request):
-        """Get latest compliance scan results"""
         try:
             organization = get_object_or_404(Org, user=request.user)
             window_start = timezone.now() - timedelta(days=self.DUPLICATE_WINDOW_DAYS)
+            audits = ComplianceAudit.objects.filter(organization=organization, detected_at__gte=window_start).order_by('-detected_at')
+            violations = ViolationReport.objects.filter(organization=organization, detected_at__gte=window_start).order_by('-detected_at')
 
-            audits = ComplianceAudit.objects.filter(
-                organization=organization,
-                detected_at__gte=window_start
-            ).order_by('-detected_at')
-
-            violations = ViolationReport.objects.filter(
-                organization=organization,
-                detected_at__gte=window_start
-            ).order_by('-detected_at')
-
-            # Compute risk score from pending audits
             pending_audits = audits.filter(status='PENDING')
-            risk_score = 0
+            risk_score = NDPRRulesEngine.calculate_risk_score([{'rule': a.rule_name, 'details': a.details} for a in pending_audits])
 
-            if pending_audits.exists():
-                rule_name_to_key = {v['name']: k for k, v in NDPRRulesEngine.RULES.items()}
-                risk_score = NDPRRulesEngine.calculate_risk_score([
-                    {
-                        'rule': rule_name_to_key.get(audit.rule_name, 'UNKNOWN'),
-                        'details': audit.details
-                    }
-                    for audit in pending_audits
-                ])
-
-            # Severity counts
-            critical_count = pending_audits.filter(severity='CRITICAL').count()
-            high_count = pending_audits.filter(severity='HIGH').count()
-            medium_count = pending_audits.filter(severity='MEDIUM').count()
-
-            # ✅ FIXED: return full records AND correct violation count
             return Response({
                 'risk_score': risk_score,
-                'total_violations': violations.count(),
-                'critical_count': critical_count,
-                'high_count': high_count,
-                'medium_count': medium_count,
-                'audits': ComplianceAuditSerializer(audits, many=True).data,
-                'violations': ViolationReportSerializer(violations, many=True).data,
+                'total_violations': pending_audits.count(),
+                'critical_count': pending_audits.filter(severity='CRITICAL').count(),
+                'high_count': pending_audits.filter(severity='HIGH').count(),
+                'medium_count': pending_audits.filter(severity='MEDIUM').count(),
+                'audits': ComplianceAuditSerializer(audits[:10], many=True).data,
+                'violations': ViolationReportSerializer(violations[:10], many=True).data,
             }, status=status.HTTP_200_OK)
-
         except Exception as e:
-            return Response({
-                'error': f'Failed to retrieve compliance data: {str(e)}'
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class ComplianceReportsView(APIView):
@@ -185,8 +76,8 @@ class ComplianceReportsView(APIView):
     DUPLICATE_WINDOW_DAYS = 30
 
     def get(self, request, org_id=None):
-        """Retrieve compliance reports"""
         try:
+            # Determine organization
             if org_id:
                 organization = get_object_or_404(Org, pk=org_id)
                 if organization.user != request.user and not request.user.is_staff:
@@ -212,10 +103,7 @@ class ComplianceReportsView(APIView):
             unresolved_violations = violations.filter(resolved=False).count()
 
             return Response({
-                'organization': {
-                    'id': organization.id,
-                    'name': organization.name,
-                },
+                'organization': {'id': organization.id, 'name': organization.name},
                 'statistics': {
                     'total_audits': total_audits,
                     'pending_audits': pending_audits,
@@ -232,21 +120,14 @@ class ComplianceReportsView(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-
 class ComplianceAuditDetailView(APIView):
     """Manage individual compliance audit records"""
     permission_classes = [IsAuthenticated, IsOrganization]
 
     def get(self, request, audit_id):
-        """Get audit details"""
         try:
             organization = get_object_or_404(Org, user=request.user)
-            audit = get_object_or_404(
-                ComplianceAudit,
-                pk=audit_id,
-                organization=organization
-            )
-
+            audit = get_object_or_404(ComplianceAudit, pk=audit_id, organization=organization)
             serializer = ComplianceAuditSerializer(audit)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -256,14 +137,9 @@ class ComplianceAuditDetailView(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def patch(self, request, audit_id):
-        """Update audit status"""
         try:
             organization = get_object_or_404(Org, user=request.user)
-            audit = get_object_or_404(
-                ComplianceAudit,
-                pk=audit_id,
-                organization=organization
-            )
+            audit = get_object_or_404(ComplianceAudit, pk=audit_id, organization=organization)
 
             new_status = request.data.get('status')
             if new_status in dict(ComplianceAudit.STATUS_CHOICES):
