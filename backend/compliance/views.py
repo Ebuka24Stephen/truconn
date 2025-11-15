@@ -24,7 +24,7 @@ class ComplianceScanView(APIView):
     (prevents duplicates within 30 days).
     """
     permission_classes = [IsAuthenticated, IsOrganization]
-    DUPLICATE_WINDOW_DAYS = 30  # window to prevent duplicate entries
+    DUPLICATE_WINDOW_DAYS = 30
 
     def post(self, request):
         """Run a full compliance scan"""
@@ -35,19 +35,19 @@ class ComplianceScanView(APIView):
             # 1️⃣ Run compliance checks
             scan_result = NDPRRulesEngine.run_all_checks(organization)
 
-            # Ensure violations dicts have required keys
+            # Prepare violation entries
             violations_data = []
             for v in scan_result.get('violations', []):
                 violation_type = v.get('violation_type')
                 if not violation_type:
-                    continue  # skip invalid entry
+                    continue
                 violations_data.append({
                     "violation_type": violation_type,
                     "description": v.get('description', ''),
                     "affected_users_count": v.get('affected_users_count', 0)
                 })
 
-            # Ensure audits dicts have required keys
+            # Prepare audit entries
             audits_data = []
             for a in scan_result.get('audits', []):
                 rule_name = a.get('rule_name')
@@ -69,6 +69,7 @@ class ComplianceScanView(APIView):
                     rule_name=audit['rule_name'],
                     detected_at__gte=window_start
                 ).exists()
+
                 if not exists:
                     audit_obj = ComplianceAudit.objects.create(
                         organization=organization,
@@ -89,6 +90,7 @@ class ComplianceScanView(APIView):
                     violation_type=violation['violation_type'],
                     detected_at__gte=window_start
                 ).exists()
+
                 if not exists:
                     violation_obj = ViolationReport.objects.create(
                         organization=organization,
@@ -99,7 +101,7 @@ class ComplianceScanView(APIView):
                     )
                     violation_records.append(violation_obj)
 
-            # 4️⃣ Serialize for response
+            # Serialize records
             audit_serializer = ComplianceAuditSerializer(audit_records, many=True)
             violation_serializer = ViolationReportSerializer(violation_records, many=True)
 
@@ -143,6 +145,7 @@ class ComplianceScanView(APIView):
             # Compute risk score from pending audits
             pending_audits = audits.filter(status='PENDING')
             risk_score = 0
+
             if pending_audits.exists():
                 rule_name_to_key = {v['name']: k for k, v in NDPRRulesEngine.RULES.items()}
                 risk_score = NDPRRulesEngine.calculate_risk_score([
@@ -153,25 +156,28 @@ class ComplianceScanView(APIView):
                     for audit in pending_audits
                 ])
 
-            # Count by severity
+            # Severity counts
             critical_count = pending_audits.filter(severity='CRITICAL').count()
             high_count = pending_audits.filter(severity='HIGH').count()
             medium_count = pending_audits.filter(severity='MEDIUM').count()
 
+            # ✅ FIXED: return full records AND correct violation count
             return Response({
                 'risk_score': risk_score,
-                'total_violations': pending_audits.count(),
+                'total_violations': violations.count(),
                 'critical_count': critical_count,
                 'high_count': high_count,
                 'medium_count': medium_count,
-                'audits': ComplianceAuditSerializer(audits[:10], many=True).data,
-                'violations': ViolationReportSerializer(violations[:10], many=True).data,
+                'audits': ComplianceAuditSerializer(audits, many=True).data,
+                'violations': ViolationReportSerializer(violations, many=True).data,
             }, status=status.HTTP_200_OK)
 
         except Exception as e:
             return Response({
                 'error': f'Failed to retrieve compliance data: {str(e)}'
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 
 class ComplianceReportsView(APIView):
     """Get compliance reports for an organization"""
@@ -181,7 +187,6 @@ class ComplianceReportsView(APIView):
     def get(self, request, org_id=None):
         """Retrieve compliance reports"""
         try:
-            # Determine organization
             if org_id:
                 organization = get_object_or_404(Org, pk=org_id)
                 if organization.user != request.user and not request.user.is_staff:
@@ -191,7 +196,6 @@ class ComplianceReportsView(APIView):
 
             window_start = timezone.now() - timedelta(days=self.DUPLICATE_WINDOW_DAYS)
 
-            # Fetch audit records and violation reports
             audits = ComplianceAudit.objects.filter(
                 organization=organization,
                 detected_at__gte=window_start
@@ -202,7 +206,6 @@ class ComplianceReportsView(APIView):
                 detected_at__gte=window_start
             ).order_by('-detected_at')
 
-            # Statistics
             total_audits = audits.count()
             pending_audits = audits.filter(status='PENDING').count()
             resolved_audits = audits.filter(status='RESOLVED').count()
@@ -229,6 +232,7 @@ class ComplianceReportsView(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+
 class ComplianceAuditDetailView(APIView):
     """Manage individual compliance audit records"""
     permission_classes = [IsAuthenticated, IsOrganization]
@@ -252,7 +256,7 @@ class ComplianceAuditDetailView(APIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def patch(self, request, audit_id):
-        """Update audit status (e.g., mark as resolved)"""
+        """Update audit status"""
         try:
             organization = get_object_or_404(Org, user=request.user)
             audit = get_object_or_404(
@@ -261,7 +265,6 @@ class ComplianceAuditDetailView(APIView):
                 organization=organization
             )
 
-            # Update status if valid
             new_status = request.data.get('status')
             if new_status in dict(ComplianceAudit.STATUS_CHOICES):
                 audit.status = new_status
