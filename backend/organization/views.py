@@ -32,7 +32,7 @@ class ConsentRequestView(APIView):
         )
         
         access_request.save()
-        send_access_request_email(organization_id=organization.id,user_id=target_user.id,consent_id=consent.id)
+        send_access_request_email.delay(organization_id=organization.id,user_id=target_user.id,consent_id=consent.id)
 
         serializer = AccessRequestSerializer(access_request)
         return Response({

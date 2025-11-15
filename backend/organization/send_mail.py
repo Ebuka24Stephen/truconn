@@ -4,8 +4,9 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from accounts.models import CustomUser
 from consents.models import UserConsent, Consent
+from celery import shared_task
 
-
+@shared_task
 def send_access_request_email(organization_id, user_id, consent_id):
     organization = get_object_or_404(Org, id=organization_id)
     user = get_object_or_404(CustomUser, id=user_id)
