@@ -16,7 +16,7 @@ class ConsentRequestView(APIView):
     permission_classes = [IsAuthenticated, IsOrganization]
     def post(self, request, consent_id, user_id):
         target_user = get_object_or_404(CustomUser, pk=user_id)
-        if target_user!= 'CITIZEN':
+        if target_user.user_role != 'CITIZEN':
             return Response({'error':'You cannot send this request!'})
         consent = get_object_or_404(Consent, pk=consent_id)
         user_consent = UserConsent.objects.filter(consent=consent, user=target_user, access=True).first()
