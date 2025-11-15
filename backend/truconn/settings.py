@@ -182,7 +182,7 @@ CORS_PREFLIGHT_MAX_AGE = 86400
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_HTTPONLY = True
- SESSION_COOKIE_AGE = 30 * 24 * 60 * 60  # 30 days (matches refresh token lifetime)
+SESSION_COOKIE_AGE = 30 * 24 * 60 * 60  # 30 days (matches refresh token lifetime)
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep session across browser restarts
 
