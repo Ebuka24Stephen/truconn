@@ -9,7 +9,7 @@ from rest_framework import status
 from consents.models import Consent, UserConsent
 from accounts.models import CustomUser
 from .permissions import IsOrganization, IsCitizen
-from .send_mail import send_access_request_email, access_granted
+from .send_mail import send_access_request_email, notify_organization_approval
 
 
 class ConsentRequestView(APIView):
@@ -64,28 +64,24 @@ class RequestedConsentView(APIView):
 class ConsentRevocationView(APIView):
     permission_classes = [IsAuthenticated, IsCitizen]
     def post(self, request, access_id):
-        access_request = get_object_or_404(AccessRequest, pk=access_id, user=request.user)
-
-        if access_request.status != 'APPROVED':
-            access_request.status = 'APPROVED'
-            access_request.save()
-            access_granted(
-                organization_id=access_request.organization.id,
-                access_request_id=access_request.id,
-                consent_id=access_request.consent.id,
-                user_id=request.user.id
+        access_requests = get_object_or_404(AccessRequest, pk=access_id, user=request.user)
+        if access_requests.status != 'APPROVED':
+            access_requests.status = 'APPROVED'
+            access_requests.save()
+            organization = access_requests.organization
+            notify_organization_approval(
+                organization_email=organization.email,
+                organization_name=organization.name,
+                access_request_id=access_requests.id
             )
-            message = 'Consent Granted!'
+            access_requests_serializer = AccessRequestSerializer(access_requests)
+            return Response({'message':'Consent Granted!'})
+        
         else:
-            access_request.status = 'REVOKED'
-            access_request.save()
-            message = 'Consent Revoked!'
-
-        serializer = AccessRequestSerializer(access_request)
-        return Response({
-            "message": message,
-            "data": serializer.data
-        }, status=status.HTTP_200_OK)
+            access_requests.status = 'REVOKED'
+            access_requests.save()
+            access_requests_serializer = AccessRequestSerializer(access_requests)
+            return Response({'message':'Consent Revoked!'})
 
 
 

@@ -47,39 +47,25 @@ Truconn – Your Data, Your Control.
     return {"message": "Email sent successfully"}
 
 
-def access_granted(organization_id, access_request_id, consent_id, user_id):
-    organization = get_object_or_404(Org, id=organization_id)
-    user = get_object_or_404(CustomUser, id=user_id)
-    consent = get_object_or_404(Consent, id=consent_id)
-    user_consent = get_object_or_404(UserConsent, consent=consent, user=user)
 
-    access_request = get_object_or_404(
-        AccessRequest,
-        id=access_request_id,
-        organization=organization,
-        user=user,
-        consent=consent
+def notify_organization_approval(organization_email, organization_name, access_request_id):
+    """
+    Send an email to the organization notifying them that their access request has been approved.
+
+    Args:
+        organization_email (str): The organization's email address.
+        organization_name (str): The name of the organization.
+        access_request_id (int): The ID of the approved access request.
+    """
+    subject = f"Access Request Approved - Request #{access_request_id}"
+    message = (
+        f"Hello {organization_name},\n\n"
+        f"Your access request with ID #{access_request_id} has been approved.\n\n"
+        f"You can now access the resources as per your request.\n\n"
+        f"Thank you,\n"
+        f"The Compliance Team"
     )
+    from_email = settings.DEFAULT_FROM_EMAIL
+    recipient_list = [organization_email]
 
-    subject = f"{organization.name} - Data Access Approved"
-    message = f"""
-Hello {organization.name},
-
-{user.first_name} has granted access to their data.
-
-Consent Type: {consent.name}
-Consent Description: {consent.description if hasattr(consent, 'description') else 'N/A'}
-Access Request Status: {access_request.status}
-
-Truconn – Your Data, Your Control.
-"""
-
-    send_mail(
-        subject,
-        message,
-        settings.DEFAULT_FROM_EMAIL,
-        [organization.email],
-        fail_silently=False,
-    )
-
-    return {"message": "Email sent successfully"}
+    send_mail(subject, message, from_email, recipient_list)
