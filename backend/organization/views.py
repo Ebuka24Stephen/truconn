@@ -36,17 +36,7 @@ class ConsentRequestView(APIView):
             defaults={"status": "PENDING"}
         )
 
-        try:
-            send_access_request_email(
-                organization_id=organization.id,
-                user_id=target_user.id,
-                consent_id=consent.id
-            )
-        except Exception as e:
-            # Log the email error instead of printing
-            import logging
-            logger = logging.getLogger(__name__)
-            logger.error("Email sending failed: %s", e)
+        
 
         return Response(
             {"message": "Access request processed successfully.", "status": access_request.status},
