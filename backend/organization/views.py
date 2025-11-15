@@ -14,31 +14,63 @@ from .send_mail import send_access_request_email, notify_organization_approval
 
 class ConsentRequestView(APIView):
     permission_classes = [IsAuthenticated, IsOrganization]
-    def post(self, request, consent_id, user_id):
-        target_user = get_object_or_404(CustomUser, pk=user_id, user_role='CITIZEN')
+
+    def post(self, request, user_id, consent_id):
+        target_user = get_object_or_404(CustomUser, pk=user_id)
+
+        if target_user.user_role != "CITIZEN":
+            return Response(
+                {"error": "Target user is not a citizen."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         consent = get_object_or_404(Consent, pk=consent_id)
-        user_consent = UserConsent.objects.filter(consent=consent, user=target_user, access=True).first()
+        user_consent = UserConsent.objects.filter(
+            user=target_user,
+            consent=consent,
+            access=True
+        ).first()
+
         if not user_consent:
             return Response(
                 {"error": "User has not granted this consent."},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        organization = Org.objects.get(user=request.user)
+        try:
+            organization = Org.objects.get(user=request.user)
+        except Org.DoesNotExist:
+            return Response(
+                {"error": "Organization profile not found for this user."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         access_request, created = AccessRequest.objects.get_or_create(
             organization=organization,
-            user = target_user,
+            user=target_user,
             consent=consent,
-            defaults={'status': 'PENDING'},
+            defaults={"status": "PENDING"}
         )
-        
-        access_request.save()
-        send_access_request_email.delay(organization_id=organization.id,user_id=target_user.id,consent_id=consent.id)
+        if created:
+            try:
+                send_access_request_email(
+                    organization_id=organization.id,
+                    user_id=target_user.id,
+                    consent_id=consent.id
+                )
+            except Exception as e:
+                print("Email Error:", e)
 
+    
         serializer = AccessRequestSerializer(access_request)
-        return Response({
-            "message": "Access request sent successfully.",
-            "data": serializer.data
-        }, status=status.HTTP_200_OK)
+
+        return Response(
+            {
+                "message": "Access request sent successfully."
+                if created else
+                "Access request already exists.",
+                "data": serializer.data
+            },
+            status=status.HTTP_200_OK
+        )
 
 #Authenticated users can check to see which organization sent a request for data access
 class RequestedConsentView(APIView):
