@@ -9,39 +9,38 @@ from rest_framework import status
 from consents.models import Consent, UserConsent
 from accounts.models import CustomUser
 from .permissions import IsOrganization, IsCitizen
-from .send_mail import send_access_request_email, notify_organization_approval
+from .send_mail import send_access_request_email
 
 
-    
 class ConsentRequestView(APIView):
     permission_classes = [IsAuthenticated, IsOrganization]
-
-    def post(self, request, user_id, consent_id):
+    def post(self, request, consent_id, user_id):
         target_user = get_object_or_404(CustomUser, pk=user_id)
-
-        if target_user.user_role != "CITIZEN":
-            return Response({"error": "Target user is not a citizen."}, status=400)
-
+        if target_user!= 'CITIZEN':
+            return Response({'error':'You cannot send this request!'})
         consent = get_object_or_404(Consent, pk=consent_id)
-
-        if not UserConsent.objects.filter(user=target_user, consent=consent, access=True).exists():
-            return Response({"error": "User has not granted this consent."}, status=400)
-
-        organization = get_object_or_404(Org, user=request.user)
-
+        user_consent = UserConsent.objects.filter(consent=consent, user=target_user, access=True).first()
+        if not user_consent:
+            return Response(
+                {"error": "User has not granted this consent."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        organization = Org.objects.get(user=request.user)
         access_request, created = AccessRequest.objects.get_or_create(
             organization=organization,
-            user=target_user,
+            user = target_user,
             consent=consent,
-            defaults={"status": "PENDING"}
+            defaults={'status': 'PENDING'},
         )
-
         
+        access_request.save()
+        send_access_request_email(organization_id=organization.id,user_id=target_user.id,consent_id=consent.id)
 
-        return Response(
-            {"message": "Access request processed successfully.", "status": access_request.status},
-            status=201 if created else 200
-        )
+        serializer = AccessRequestSerializer(access_request)
+        return Response({
+            "message": "Access request sent successfully.",
+            "data": serializer.data
+        }, status=status.HTTP_200_OK)
 
 #Authenticated users can check to see which organization sent a request for data access
 class RequestedConsentView(APIView):
@@ -71,12 +70,6 @@ class ConsentRevocationView(APIView):
         if access_requests.status != 'APPROVED':
             access_requests.status = 'APPROVED'
             access_requests.save()
-            organization = access_requests.organization
-            notify_organization_approval(
-                organization_email=organization.email,
-                organization_name=organization.name,
-                access_request_id=access_requests.id
-            )
             access_requests_serializer = AccessRequestSerializer(access_requests)
             return Response({'message':'Consent Granted!'})
         
