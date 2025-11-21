@@ -9,7 +9,7 @@ export default function GetStartedPage() {
   const features = [
     { icon: Shield, color: 'purple', title: 'Consent You Control', description: 'Grant or revoke access by category: Financial, Biometric, Health, Identity.' },
     { icon: Eye, color: 'cyan', title: 'Full Transparency', description: 'See who accessed your data, when, and why — in real time.' },
-    { icon: FileCheck, color: 'violet', title: 'Built for NDPR', description: 'Compliance-first workflows aligned to Nigeria's data laws.' },
+    { icon: FileCheck, color: 'violet', title: 'Built for NDPR', description: "Compliance-first workflows aligned to Nigeria's data laws." },
   ]
 
   const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } } }
