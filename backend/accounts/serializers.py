@@ -10,7 +10,7 @@ class RegisterSerializer(serializers.Serializer):
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
     user_role = serializers.ChoiceField(choices=CustomUser.USER_ROLE_CHOICES)
-
+    email = serializers.EmailField()
     # Organization fields
     name = serializers.CharField(required=False)
     website = serializers.CharField(required=False, allow_blank=True)
