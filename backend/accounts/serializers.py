@@ -4,7 +4,9 @@ from django.contrib.auth import authenticate
 from .models import Profile, CustomUser, OrgProfile
 from organization.models import Org
 from django.db import transaction
-class RegisterSerializer(serializers.Serializer):
+class RegisterSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
     user_role = serializers.ChoiceField(choices=CustomUser.USER_ROLE_CHOICES)
