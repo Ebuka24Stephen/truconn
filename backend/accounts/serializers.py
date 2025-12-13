@@ -36,7 +36,7 @@ class RegisterSerializer(serializers.Serializer):
         if CustomUser.objects.filter(email=value).exists():
             raise serializers.ValidationError("Email already in use")
         return value
-    @transaction.atomic()
+    @transaction.atomic
     def create(self, validated_data):
         password = validated_data.pop('password1')
         validated_data.pop('password2')
