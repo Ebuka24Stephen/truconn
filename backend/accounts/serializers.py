@@ -3,8 +3,8 @@ from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth import authenticate
 from .models import Profile, CustomUser, OrgProfile
 from organization.models import Org
-
-class RegisterSerializer(serializers.ModelSerializer):
+from django.db import transaction
+class RegisterSerializer(serializers.Serializer):
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
     user_role = serializers.ChoiceField(choices=CustomUser.USER_ROLE_CHOICES)
@@ -14,12 +14,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     website = serializers.CharField(required=False, allow_blank=True)
     address = serializers.CharField(required=False, allow_blank=True)
 
-    class Meta:
-        model = CustomUser
-        fields = [
-            'first_name', 'last_name', 'email', 'password1', 'password2',
-            'user_role', 'name', 'website', 'address'
-        ]
+    
 
     def validate(self, attrs):
         if attrs['password1'] != attrs['password2']:
@@ -39,7 +34,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         if CustomUser.objects.filter(email=value).exists():
             raise serializers.ValidationError("Email already in use")
         return value
-
+    @transaction.atomic()
     def create(self, validated_data):
         password = validated_data.pop('password1')
         validated_data.pop('password2')
