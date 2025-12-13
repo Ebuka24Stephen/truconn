@@ -36,6 +36,7 @@ class RegisterSerializer(serializers.Serializer):
         if CustomUser.objects.filter(email=value).exists():
             raise serializers.ValidationError("Email already in use")
         return value
+    
     @transaction.atomic
     def create(self, validated_data):
         password = validated_data.pop('password1')
@@ -52,7 +53,7 @@ class RegisterSerializer(serializers.Serializer):
                 user_role='CITIZEN'
             )
             # Create citizen profile
-            Profile.objects.create(user=user)
+            #Profile.objects.create(user=user)
 
         else:
             # Organization user
