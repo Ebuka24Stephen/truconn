@@ -4,19 +4,19 @@ from django.contrib.auth import authenticate
 from .models import Profile, CustomUser, OrgProfile
 from organization.models import Org
 from django.db import transaction
-class RegisterSerializer(serializers.Serializer):
-    first_name = serializers.CharField(required=True)
-    last_name = serializers.CharField(required=True)
+class RegisterSerializer(serializers.ModelSerializer):
+    
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
     user_role = serializers.ChoiceField(choices=CustomUser.USER_ROLE_CHOICES)
-    email = serializers.EmailField()
     # Organization fields
     name = serializers.CharField(required=False)
     website = serializers.CharField(required=False, allow_blank=True)
     address = serializers.CharField(required=False, allow_blank=True)
 
-    
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'email']
 
     def validate(self, attrs):
         if attrs['password1'] != attrs['password2']:
