@@ -21,7 +21,7 @@ class SignUpView(APIView):
 
             # Choose profile based on user role
             if user.user_role == "CITIZEN":
-                    profile_instance, _ = user.profile.get_or_create(user=user)
+                    profile_instance, _ = Profile.objects.get_or_create(user=user)
                     profile_data = ProfileSerializer(profile_instance).data
             else:
                 profile_instance, _ = OrgProfile.objects.get_or_create(user=user)
